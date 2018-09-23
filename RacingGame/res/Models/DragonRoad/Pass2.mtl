@@ -1,0 +1,21 @@
+# Material Count: 2
+
+newmtl gxmat116
+Ns 20
+Ni 0.02
+Tr 0
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 52.png
+
+newmtl gxmat91
+Ns 20
+Ni 0.02
+Tr 0
+d 1.000000
+glow 1.0
+scrollX 0
+scrollY 0
+map_Kd 133.png
+

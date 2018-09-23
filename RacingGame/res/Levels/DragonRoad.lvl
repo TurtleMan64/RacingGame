@@ -1,0 +1,43 @@
+DragonRoad
+Track
+DragonRoad
+1
+Collision 8
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.933 0.882 0.8157
+0.0 0.0 0.0
+0.933 0.882 0.8157
+0.0 0.0 0.0
+0.0007 3.0
+111
+540 9
+1
+4
+res/Audio/BGM/aeropolis_intro.ogg
+res/Audio/BGM/aeropolis_loop.ogg
+res/Audio/BGM/aeropolis_b_intro.ogg
+res/Audio/BGM/aeropolis_b_loop.ogg
+0 0 0
+0 0
+-200
+
+6 0 0.001 0
+
+# Pass 2
+2 res/Models/DragonRoad/ Pass2.obj
+
+# Pass 3
+3 res/Models/DragonRoad/ Pass3.obj
+
+# Transparent
+4 res/Models/DragonRoad/ Transparent.obj
+
+8 0.0054867859 5.36034584 -198.520782  0 0 0
+8 -130.454025 135.142151 295.95578     0 0 0
+8 0.112190239 267.071106 -401.623901   0 0 0
+8 401.553925 120.910133 -279.981598    0 0 0
+8 404.262573 120.910286 -219.592117    0 0 0
+8 633.991638 120.910126 -249.845001    0 0 0
+8 4570.37842 -3035.73584 -601.260986   0 0 0
+8 245.820541 205.52803 602.12384       0 0 0

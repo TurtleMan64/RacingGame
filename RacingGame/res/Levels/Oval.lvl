@@ -1,0 +1,25 @@
+Oval
+Oval
+Oval
+1
+Oval 7
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.3 0.3 0.45
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.000005 20.0
+111
+540 9
+0
+0
+0 0 0
+0 0
+-200
+
+# Car
+6 0 1 0
+
+# Transparent
+72 res/Models/TwistRoad/ Transparent.obj pass2

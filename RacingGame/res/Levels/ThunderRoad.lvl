@@ -1,0 +1,27 @@
+ThunderRoad
+Track
+ThunderRoad
+1
+Collision 8
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.3 0.3 0.45
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0007 3.0
+111
+540 9
+0
+0
+0 0 0
+0 0
+-200
+
+6 0 10 0
+
+# Pass 2
+2 res/Models/ThunderRoad/ Pass2.obj
+
+# Pass 3
+3 res/Models/ThunderRoad/ Pass3.obj

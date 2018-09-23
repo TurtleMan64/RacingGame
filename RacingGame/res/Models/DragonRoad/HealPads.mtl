@@ -1,0 +1,29 @@
+# Material Count: 3
+
+newmtl gxmat59
+Ns 96.078431
+Ni 1.000000
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 38.png
+
+newmtl gxmat61
+Ns 96.078431
+Ni 1.000000
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 146.png
+
+newmtl gxmat64
+Ns 96.078431
+Ni 1.000000
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 20.png
+

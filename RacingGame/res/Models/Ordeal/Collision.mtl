@@ -1,0 +1,140 @@
+# Material Count: 15
+
+newmtl gxmat608
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+type brake
+map_Kd 134.png
+
+newmtl gxmat1058
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 96.png
+
+newmtl gxmat1065
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 68.png
+
+newmtl gxmat1055
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 101.png
+
+newmtl gxmat1064
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 51.png
+
+newmtl gxmat1176
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 92.png
+
+newmtl gxmat1054
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 95.png
+
+newmtl gxmat1000
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 98.png
+
+newmtl gxmat610
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+type slip
+map_Kd 135.png
+
+newmtl gxmat1005
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 97.png
+
+newmtl gxmat1056
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 100.png
+
+newmtl gxmat1008
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 93.png
+
+newmtl gxmat855.001
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+type heal
+map_Kd 119.png
+
+newmtl gxmat694
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 104.png
+
+newmtl gxmat672
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 102.png
+

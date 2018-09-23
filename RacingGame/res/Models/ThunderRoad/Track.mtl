@@ -1,0 +1,417 @@
+# Material Count: 46
+
+newmtl gxmat126
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 88.png
+
+newmtl gxmat294
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 58.png
+
+newmtl gxmat312
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 126.png
+
+newmtl gxmat129
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 75.png
+
+newmtl gxmat128
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 118.png
+
+newmtl gxmat133
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 125.png
+
+newmtl gxmat134
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 23.png
+
+newmtl gxmat290
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 62.png
+
+newmtl gxmat135
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 29.png
+
+newmtl gxmat382
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 108.png
+
+newmtl gxmat289
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 57.png
+
+newmtl gxmat136
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 44.png
+
+newmtl gxmat12
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 35.png
+
+newmtl gxmat287
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 60.png
+
+newmtl gxmat277
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 61.png
+
+newmtl gxmat314
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 100.png
+
+newmtl gxmat1
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 130.png
+
+newmtl gxmat139
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 17.png
+
+newmtl gxmat761
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 113.png
+
+newmtl gxmat146
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 43.png
+
+newmtl gxmat280
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 65.png
+
+newmtl gxmat510
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 104.png
+
+newmtl gxmat121
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 91.png
+
+newmtl gxmat319
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 26.png
+
+newmtl gxmat283
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 64.png
+
+newmtl gxmat539
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 94.png
+
+newmtl gxmat125
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 107.png
+
+newmtl gxmat117
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 72.png
+
+newmtl gxmat494
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 47.png
+
+newmtl gxmat495
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+glow 1.0
+scrollX 0
+scrollY 0
+map_Kd 85.png
+
+newmtl gxmat492
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 81.png
+
+newmtl gxmat122
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 90.png
+
+newmtl gxmat506
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 25.png
+
+newmtl gxmat10
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 116.png
+
+newmtl gxmat130
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 76.png
+
+newmtl gxmat318
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 127.png
+
+newmtl gxmat124
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 89.png
+
+newmtl gxmat544
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 98.png
+
+newmtl gxmat295
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 71.png
+
+newmtl gxmat313
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 33.png
+
+newmtl gxmat543
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 97.png
+
+newmtl gxmat274
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 119.png
+
+newmtl gxmat132
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 41.png
+
+newmtl gxmat311
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 128.png
+
+newmtl gxmat11
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 28.png
+
+newmtl gxmat296
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 102.png
+

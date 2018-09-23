@@ -1,0 +1,83 @@
+# Material Count: 9
+
+newmtl gxmat101
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 15.png
+
+newmtl gxmat103
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 5.png
+
+newmtl gxmat147
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 21.png
+
+newmtl gxmat142
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 22.png
+
+newmtl gxmat33
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 33.png
+
+newmtl gxmat112
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 2.png
+
+newmtl gxmat31
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 17.png
+
+newmtl gxmat1
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 16.png
+
+newmtl gxmat110
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 13.png
+

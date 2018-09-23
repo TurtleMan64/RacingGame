@@ -1,0 +1,763 @@
+#include <glad/glad.h>
+#include <fstream>
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <vector>
+#include <list>
+
+//#include <ctime>
+
+#include "objLoader.h"
+#include "../models/models.h"
+#include "../renderEngine/renderEngine.h"
+#include "../toolbox/vector.h"
+#include "vertex.h"
+#include "../engineTester/main.h"
+#include "../toolbox/split.h"
+#include "../collision/collisionmodel.h"
+#include "../collision/triangle3d.h"
+#include "fakeTexture.h"
+
+void parseMtl(std::string filePath, std::string fileName);
+
+void processVertex(char** vertex,
+	std::vector<Vertex*>* vertices,
+	std::vector<int>* indices);
+
+void dealWithAlreadyProcessedVertex(Vertex*, 
+	int, 
+	int, 
+	std::vector<int>*, 
+	std::vector<Vertex*>*);
+
+void removeUnusedVertices(std::vector<Vertex*>* vertices);
+
+void convertDataToArrays(std::vector<Vertex*>* vertices, std::vector<Vector2f>* textures,
+	std::vector<Vector3f>* normals, std::vector<float>* verticesArray, std::vector<float>* texturesArray,
+	std::vector<float>* normalsArray);
+
+std::vector<ModelTexture> modelTextures;
+
+std::vector<ModelTexture> modelTexturesList;
+std::vector<std::string> textureNamesList;
+
+void loadObjModel(std::list<TexturedModel*>* models, std::string filePath, std::string fileName)
+{
+	if (models->size() > 0)
+	{
+		return;
+	}
+
+	std::ifstream file(filePath+fileName);
+	if (!file.is_open())
+	{
+		std::fprintf(stdout, "Error: Cannot load file '%s'\n", (filePath + fileName).c_str());
+		file.close();
+		return;
+	}
+
+	std::string line;
+
+	std::vector<Vertex*> vertices;
+	std::vector<Vector2f> textures;
+	std::vector<Vector3f> normals;
+	std::vector<int> indices;
+
+	std::vector<RawModel> rawModelsList;
+
+	int foundFaces = 0;
+
+
+	//clock_t t;
+	//t = clock();
+	//printf("Calculating total...\n");
+
+	while (!file.eof())
+	{
+		getline(file, line);
+
+		char lineBuf[256];
+		memcpy(lineBuf, line.c_str(), line.size()+1);
+
+		int splitLength = 0;
+		char** lineSplit = split(lineBuf, ' ', &splitLength);
+
+		if (splitLength > 0)
+		{
+			if (foundFaces == 0)
+			{
+				//Find the mtl filename
+				if (strcmp(lineSplit[0], "mtllib") == 0)
+				{
+					parseMtl(filePath, lineSplit[1]);
+				}
+				else if (strcmp(lineSplit[0], "v") == 0)
+				{
+					std::string p1(lineSplit[1]);
+					std::string p2(lineSplit[2]);
+					std::string p3(lineSplit[3]);
+					Vector3f vertex(std::stof(p1, nullptr), std::stof(p2, nullptr), std::stof(p3, nullptr));
+					Vertex* newVertex = new Vertex((int)vertices.size(), &vertex); INCR_NEW
+					vertices.push_back(newVertex);
+				}
+				else if (strcmp(lineSplit[0], "vt") == 0)
+				{
+					std::string t1(lineSplit[1]);
+					std::string t2(lineSplit[2]);
+					Vector2f texCoord(std::stof(t1, nullptr), std::stof(t2, nullptr));
+					textures.push_back(texCoord);
+				}
+				else if (strcmp(lineSplit[0], "vn") == 0)
+				{
+					std::string n1(lineSplit[1]);
+					std::string n2(lineSplit[2]);
+					std::string n3(lineSplit[3]);
+					Vector3f normal(std::stof(n1, nullptr), std::stof(n2, nullptr), std::stof(n3, nullptr));
+					normals.push_back(normal);
+				}
+				else if (strcmp(lineSplit[0], "usemtl") == 0) //first usetml found, before any faces entered
+				{
+					for (unsigned int i = 0; i < textureNamesList.size(); i++) //search for the right texture to use based off its name
+					{
+						std::string testName = textureNamesList[i];
+						if (testName == lineSplit[1]) //we've found the right texture!
+						{
+							modelTextures.push_back(modelTexturesList[i]); //put a copy of the texture into modelTextures
+						}
+					}
+				}
+				else if (strcmp(lineSplit[0], "f") == 0)
+				{
+					foundFaces = 1;
+				}
+			}
+
+			if (foundFaces == 1)
+			{
+				if (strcmp(lineSplit[0], "f") == 0)
+				{
+					int dummy = 0;
+					char** vertex1 = split(lineSplit[1], '/', &dummy);
+					char** vertex2 = split(lineSplit[2], '/', &dummy);
+					char** vertex3 = split(lineSplit[3], '/', &dummy);
+
+					processVertex(vertex1, &vertices, &indices);
+					processVertex(vertex2, &vertices, &indices);
+					processVertex(vertex3, &vertices, &indices);
+
+					free(vertex1);
+					free(vertex2);
+					free(vertex3);
+				}
+				else if (strcmp(lineSplit[0], "usemtl") == 0 && (vertices.size() > 0)) //found another new material, so save the previous model and start a new one
+				{
+					for (unsigned int i = 0; i < textureNamesList.size(); i++) //search for the right texture to use based off its name
+					{
+						std::string testName = textureNamesList[i];
+						if (testName == lineSplit[1]) //we've found the right texture!
+						{
+							modelTextures.push_back(modelTexturesList[i]); //put a copy of the texture into modelTextures
+						}
+					}
+
+					//save the model we've been building so far...
+					removeUnusedVertices(&vertices);
+					std::vector<float> verticesArray;
+					std::vector<float> texturesArray;
+					std::vector<float> normalsArray;
+
+					convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
+					rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+
+					indices.clear();
+				}
+			}
+		}
+		free(lineSplit);
+	}
+	file.close();
+
+	//t = clock() - t;
+	//printf("Total: It took me %d clicks (%f seconds).\n", t, ((float)t) / CLOCKS_PER_SEC);
+
+	removeUnusedVertices(&vertices);
+
+	std::vector<float> verticesArray;
+	std::vector<float> texturesArray;
+	std::vector<float> normalsArray;
+
+	convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
+	rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+
+	//go through rawModelsList and modelTextures to construct and add to the given TexturedModel list
+	for (unsigned int i = 0; i < rawModelsList.size(); i++)
+	{
+		TexturedModel* tm = new TexturedModel(&rawModelsList[i], &modelTextures[i]); INCR_NEW
+		models->push_back(tm);
+	}
+
+	for (auto vertex : vertices)
+	{
+		delete vertex; INCR_DEL
+	}
+
+	line.clear();
+
+	vertices.clear();
+	textures.clear();
+	normals.clear();
+	indices.clear();
+
+	rawModelsList.clear();
+	modelTextures.clear();
+	modelTexturesList.clear();
+	textureNamesList.clear();
+
+	vertices.shrink_to_fit();
+	textures.shrink_to_fit();
+	normals.shrink_to_fit();
+	indices.shrink_to_fit();
+
+	rawModelsList.shrink_to_fit();
+	modelTextures.shrink_to_fit();
+	modelTexturesList.shrink_to_fit();
+	textureNamesList.shrink_to_fit();
+}
+
+void parseMtl(std::string filePath, std::string fileName)
+{
+	//array that obj will fill in, using our generated arrays
+	modelTextures.clear();
+
+	//arrays that we fill in, from the mtl file
+	modelTexturesList.clear();
+	textureNamesList.clear();
+
+	std::ifstream file(filePath+fileName);
+	if (!file.is_open())
+	{
+		std::fprintf(stdout, "Error: Cannot load file '%s'\n", (filePath + fileName).c_str());
+		file.close();
+		return;
+	}
+
+	//clock_t t;
+	//t = clock();
+	//printf("Calculating MTL...\n");
+
+	std::string line;
+
+	//default values
+	float currentShineDamperValue = 20.0f;
+	float currentReflectivityValue = 0.0f;
+	float currentTransparencyValue = 1.0f;
+	float currentFakeLightingValue = 1.0f;
+	float currentGlowAmountValue = 0.0f;
+	float currentScrollXValue = 0.0f;
+	float currentScrollYValue = 0.0f;
+
+	while (!file.eof())
+	{
+		getline(file, line);
+
+		char lineBuf[256];
+		memcpy(lineBuf, line.c_str(), line.size()+1);
+
+		int splitLength = 0;
+		char** lineSplit = split(lineBuf, ' ', &splitLength);
+
+		if (splitLength > 0)
+		{
+			if (strcmp(lineSplit[0], "newmtl") == 0) //new material found, add its name to array
+			{
+				textureNamesList.push_back(lineSplit[1]);
+				currentShineDamperValue = 0.0f;
+				currentReflectivityValue = 0.0f;
+				currentTransparencyValue = 1.0f;
+				currentFakeLightingValue = 1.0f;
+				currentGlowAmountValue = 0.0f;
+				currentScrollXValue = 0.0f;
+				currentScrollYValue = 0.0f;
+			}
+			else if (strcmp(lineSplit[0], "\tmap_Kd") == 0 || strcmp(lineSplit[0], "map_Kd") == 0) //end of material found, generate it with all its attrributes
+			{
+				std::string imageFilenameString = filePath+lineSplit[1];
+				char* fname = (char*)imageFilenameString.c_str();
+				ModelTexture newTexture(Loader_loadTexture(fname)); //generate new texture
+				newTexture.setShineDamper(currentShineDamperValue);
+				newTexture.setReflectivity(currentReflectivityValue);
+				newTexture.setHasTransparency(1);
+				newTexture.setUsesFakeLighting(0);
+				if (currentTransparencyValue > 0.0f)
+				{
+					newTexture.setHasTransparency(0);
+				}
+				if (currentFakeLightingValue < 1.0f)
+				{
+					newTexture.setUsesFakeLighting(1);
+				}
+				newTexture.setGlowAmount(currentGlowAmountValue);
+				newTexture.setScrollX(currentScrollXValue);
+				newTexture.setScrollY(currentScrollYValue);
+				modelTexturesList.push_back(newTexture); //put a copy of newTexture into the list
+			}
+			else if (strcmp(lineSplit[0], "\tNs") == 0 || strcmp(lineSplit[0], "Ns") == 0)
+			{
+				currentShineDamperValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\tNi") == 0 || strcmp(lineSplit[0], "Ni") == 0)
+			{
+				currentReflectivityValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\tTr") == 0 || strcmp(lineSplit[0], "Tr") == 0)
+			{
+				currentTransparencyValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\td") == 0 || strcmp(lineSplit[0], "d") == 0)
+			{
+				currentFakeLightingValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\tglow") == 0 || strcmp(lineSplit[0], "glow") == 0)
+			{
+				currentGlowAmountValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\tscrollX") == 0 || strcmp(lineSplit[0], "scrollX") == 0)
+			{
+				currentScrollXValue = std::stof(lineSplit[1]);
+			}
+			else if (strcmp(lineSplit[0], "\tscrollY") == 0 || strcmp(lineSplit[0], "scrollY") == 0)
+			{
+				currentScrollYValue = std::stof(lineSplit[1]);
+			}
+		}
+
+		free(lineSplit);
+	}
+	file.close();
+
+	//t = clock() - t;
+	//printf("MTL: It took me %d clicks (%f seconds).\n", t, ((float)t) / CLOCKS_PER_SEC);
+
+}
+
+
+
+void loadObjModelWithMTL(std::list<TexturedModel*>* models, std::string filePath, std::string fileNameOBJ, std::string fileNameMTL)
+{
+	if (models->size() > 0)
+	{
+		return;
+	}
+
+	std::ifstream file(filePath + fileNameOBJ);
+	if (!file.is_open())
+	{
+		std::fprintf(stdout, "Error: Cannot load file '%s'\n", (filePath + fileNameOBJ).c_str());
+		file.close();
+		return;
+	}
+
+	std::string line;
+
+	std::vector<Vertex*> vertices;
+	std::vector<Vector2f> textures;
+	std::vector<Vector3f> normals;
+	std::vector<int> indices;
+
+	std::vector<RawModel> rawModelsList;
+
+	int foundFaces = 0;
+
+	parseMtl(filePath, fileNameMTL);
+
+	while (!file.eof())
+	{
+		getline(file, line);
+
+		char lineBuf[256];
+		memcpy(lineBuf, line.c_str(), line.size()+1);
+
+		int splitLength = 0;
+		char** lineSplit = split(lineBuf, ' ', &splitLength);
+
+		if (splitLength > 0)
+		{
+			if (foundFaces == 0)
+			{
+				if (strcmp(lineSplit[0], "v") == 0)
+				{
+					std::string p1(lineSplit[1]);
+					std::string p2(lineSplit[2]);
+					std::string p3(lineSplit[3]);
+					Vector3f vertex(std::stof(p1, nullptr), std::stof(p2, nullptr), std::stof(p3, nullptr));
+					Vertex* newVertex = new Vertex((int)vertices.size(), &vertex);
+					INCR_NEW
+					vertices.push_back(newVertex);
+				}
+				else if (strcmp(lineSplit[0], "vt") == 0)
+				{
+					std::string t1(lineSplit[1]);
+					std::string t2(lineSplit[2]);
+					Vector2f texCoord(std::stof(t1, nullptr), std::stof(t2, nullptr));
+					textures.push_back(texCoord);
+				}
+				else if (strcmp(lineSplit[0], "vn") == 0)
+				{
+					std::string n1(lineSplit[1]);
+					std::string n2(lineSplit[2]);
+					std::string n3(lineSplit[3]);
+					Vector3f normal(std::stof(n1, nullptr), std::stof(n2, nullptr), std::stof(n3, nullptr));
+					normals.push_back(normal);
+				}
+				else if (strcmp(lineSplit[0], "usemtl") == 0) //first usetml found, before any faces entered
+				{
+					for (unsigned int i = 0; i < textureNamesList.size(); i++) //search for the right texture to use based off its name
+					{
+						std::string testName = textureNamesList[i];
+						if (testName == lineSplit[1]) //we've found the right texture!
+						{
+							modelTextures.push_back(modelTexturesList[i]); //put a copy of the texture into modelTextures
+						}
+					}
+				}
+				else if (strcmp(lineSplit[0], "f") == 0)
+				{
+					foundFaces = 1;
+				}
+			}
+
+			if (foundFaces == 1)
+			{
+				if (strcmp(lineSplit[0], "f") == 0)
+				{
+					int dummy = 0;
+					char** vertex1 = split(lineSplit[1], '/', &dummy);
+					char** vertex2 = split(lineSplit[2], '/', &dummy);
+					char** vertex3 = split(lineSplit[3], '/', &dummy);
+
+					processVertex(vertex1, &vertices, &indices);
+					processVertex(vertex2, &vertices, &indices);
+					processVertex(vertex3, &vertices, &indices);
+
+					free(vertex1);
+					free(vertex2);
+					free(vertex3);
+				}
+				else if (strcmp(lineSplit[0], "usemtl") == 0 && (vertices.size() > 0)) //found another new material, so save the previous model and start a new one
+				{
+					for (unsigned int i = 0; i < textureNamesList.size(); i++) //search for the right texture to use based off its name
+					{
+						std::string testName = textureNamesList[i];
+						if (testName == lineSplit[1]) //we've found the right texture!
+						{
+							modelTextures.push_back(modelTexturesList[i]); //put a copy of the texture into modelTextures
+						}
+					}
+
+					//save the model we've been building so far...
+					removeUnusedVertices(&vertices);
+					std::vector<float> verticesArray;
+					std::vector<float> texturesArray;
+					std::vector<float> normalsArray;
+
+					convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
+					rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+
+					indices.clear();
+				}
+			}
+		}
+		free(lineSplit);
+	}
+	file.close();
+
+	removeUnusedVertices(&vertices);
+	std::vector<float> verticesArray;
+	std::vector<float> texturesArray;
+	std::vector<float> normalsArray;
+
+	convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
+	rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices)); //put a copy of the final model into rawModelsList
+
+	//go through rawModelsList and modelTextures to construct and add to the given TexturedModel list
+	for (unsigned int i = 0; i < rawModelsList.size(); i++)
+	{
+		TexturedModel* tm = new TexturedModel(&rawModelsList[i], &modelTextures[i]); INCR_NEW
+		models->push_back(tm);
+	}
+
+	for (auto vertex : vertices)
+	{
+		delete vertex; INCR_DEL
+	}
+
+	line.clear();
+
+	vertices.clear();
+	textures.clear();
+	normals.clear();
+	indices.clear();
+
+	rawModelsList.clear();
+	modelTextures.clear();
+	modelTexturesList.clear();
+	textureNamesList.clear();
+
+	vertices.shrink_to_fit();
+	textures.shrink_to_fit();
+	normals.shrink_to_fit();
+	indices.shrink_to_fit();
+
+	rawModelsList.shrink_to_fit();
+	modelTextures.shrink_to_fit();
+	modelTexturesList.shrink_to_fit();
+	textureNamesList.shrink_to_fit();
+}
+
+void processVertex(char** vertex,
+	std::vector<Vertex*>* vertices,
+	std::vector<int>* indices)
+{
+	int index = atoi(vertex[0]) - 1;
+	int textureIndex = atoi(vertex[1]) - 1;
+	int normalIndex = atoi(vertex[2]) - 1;
+
+	Vertex* currentVertex = (*vertices)[index]; //check bounds on this?
+	if (currentVertex->isSet() == 0)
+	{
+		currentVertex->setTextureIndex(textureIndex);
+		currentVertex->setNormalIndex(normalIndex);
+		indices->push_back(index);
+	}
+	else
+	{
+		dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices, vertices);
+	}
+}
+
+void dealWithAlreadyProcessedVertex(
+	Vertex* previousVertex,
+	int newTextureIndex,
+	int newNormalIndex,
+	std::vector<int>* indices,
+	std::vector<Vertex*>* vertices)
+{
+	if (previousVertex->hasSameTextureAndNormal(newTextureIndex, newNormalIndex))
+	{
+		indices->push_back(previousVertex->getIndex());
+	}
+	else
+	{
+		Vertex* anotherVertex = previousVertex->getDuplicateVertex();
+		if (anotherVertex != nullptr)
+		{
+			dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex, indices, vertices);
+		}
+		else
+		{
+			Vertex* duplicateVertex = new Vertex((int)vertices->size(), previousVertex->getPosition()); INCR_NEW
+
+			duplicateVertex->setTextureIndex(newTextureIndex);
+			duplicateVertex->setNormalIndex(newNormalIndex);
+
+			previousVertex->setDuplicateVertex(duplicateVertex);
+			vertices->push_back(duplicateVertex);
+			indices->push_back(duplicateVertex->getIndex());
+		}
+	}
+}
+
+
+void convertDataToArrays(
+	std::vector<Vertex*>* vertices, 
+	std::vector<Vector2f>* textures,
+	std::vector<Vector3f>* normals, 
+	std::vector<float>* verticesArray, 
+	std::vector<float>* texturesArray,
+	std::vector<float>* normalsArray)
+{
+	for (auto currentVertex : (*vertices))
+	{
+		Vector3f* position = currentVertex->getPosition();
+		Vector2f* textureCoord = &(*textures)[currentVertex->getTextureIndex()];
+		Vector3f* normalVector = &(*normals)[currentVertex->getNormalIndex()];
+		verticesArray->push_back(position->x);
+		verticesArray->push_back(position->y);
+		verticesArray->push_back(position->z);
+		texturesArray->push_back(textureCoord->x);
+		texturesArray->push_back(1 - textureCoord->y);
+		normalsArray->push_back(normalVector->x);
+		normalsArray->push_back(normalVector->y);
+		normalsArray->push_back(normalVector->z);
+	}
+}
+
+void removeUnusedVertices(std::vector<Vertex*>* vertices)
+{
+	for (auto vertex : (*vertices))
+	{
+		if (vertex->isSet() == 0)
+		{
+			vertex->setTextureIndex(0);
+			vertex->setNormalIndex(0);
+		}
+	}
+}
+
+CollisionModel* loadCollisionModel(std::string filePath, std::string fileName)
+{
+	CollisionModel* collisionModel = new CollisionModel; INCR_NEW
+
+	std::list<FakeTexture*> fakeTextures;
+
+	char currType = 0;
+	char currSound = 0;
+	char currParticle = 0;
+
+	std::ifstream file("res/" + filePath + fileName + ".obj");
+	if (!file.is_open())
+	{
+		std::fprintf(stdout, "Error: Cannot load file '%s'\n", ("res/" + filePath + fileName + ".obj").c_str());
+		file.close();
+		return collisionModel;
+	}
+
+	std::string line;
+
+	std::vector<Vector3f> vertices;
+
+
+
+	while (!file.eof())
+	{
+		getline(file, line);
+
+		char lineBuf[256];
+		memcpy(lineBuf, line.c_str(), line.size()+1);
+
+		int splitLength = 0;
+		char** lineSplit = split(lineBuf, ' ', &splitLength);
+
+		if (splitLength > 0)
+		{
+			if (strcmp(lineSplit[0], "v") == 0)
+			{
+				Vector3f vertex;
+				vertex.x = std::stof(lineSplit[1]);
+				vertex.y = std::stof(lineSplit[2]);
+				vertex.z = std::stof(lineSplit[3]);
+				vertices.push_back(vertex);
+			}
+			else if (strcmp(lineSplit[0], "f") == 0)
+			{
+				int len = 0;
+				char** vertex1 = split(lineSplit[1], '/', &len);
+				char** vertex2 = split(lineSplit[2], '/', &len);
+				char** vertex3 = split(lineSplit[3], '/', &len);
+
+				Vector3f* vert1 = &vertices[std::stoi(vertex1[0]) - 1];
+				Vector3f* vert2 = &vertices[std::stoi(vertex2[0]) - 1];
+				Vector3f* vert3 = &vertices[std::stoi(vertex3[0]) - 1];
+
+				Triangle3D* tri = new Triangle3D(vert1, vert2, vert3, currType, currSound, currParticle); INCR_NEW
+
+				collisionModel->triangles.push_back(tri);
+
+				free(vertex1);
+				free(vertex2);
+				free(vertex3);
+			}
+			else if (strcmp(lineSplit[0], "usemtl") == 0)
+			{
+				currType = 0;
+				currSound = -1;
+				currParticle = 0;
+
+				for (FakeTexture* dummy : fakeTextures)
+				{
+					if (dummy->name == lineSplit[1])
+					{
+						currType = dummy->type;
+						currSound = dummy->sound;
+						currParticle = dummy->particle;
+					}
+				}
+			}
+			else if (strcmp(lineSplit[0], "mtllib") == 0)
+			{
+				std::ifstream fileMTL("res/" + filePath + lineSplit[1]);
+				if (!fileMTL.is_open())
+				{
+					std::fprintf(stdout, "Error: Cannot load file '%s'\n", ("res/" + filePath + lineSplit[1]).c_str());
+					fileMTL.close();
+					file.close();
+					return collisionModel;
+				}
+
+				std::string lineMTL;
+
+				while (!fileMTL.eof())
+				{
+					getline(fileMTL, lineMTL);
+
+					char lineBufMTL[256];
+					memcpy(lineBufMTL, lineMTL.c_str(), lineMTL.size()+1);
+
+					int splitLengthMTL = 0;
+					char** lineSplitMTL = split(lineBufMTL, ' ', &splitLengthMTL);
+
+					if (splitLengthMTL > 0)
+					{
+						if (strcmp(lineSplitMTL[0], "newmtl") == 0)
+						{
+							FakeTexture* fktex = new FakeTexture; INCR_NEW
+
+							fktex->name = lineSplitMTL[1];
+							fakeTextures.push_back(fktex);
+						}
+						else if (strcmp(lineSplitMTL[0], "type") == 0 ||
+								 strcmp(lineSplitMTL[0], "\ttype") == 0)
+						{
+							if (strcmp(lineSplitMTL[1], "heal") == 0)
+							{
+								fakeTextures.back()->type = 1;
+							}
+							else if (strcmp(lineSplitMTL[1], "slip") == 0)
+							{
+								fakeTextures.back()->type = 2;
+							}
+							else if (strcmp(lineSplitMTL[1], "brake") == 0)
+							{
+								fakeTextures.back()->type = 3;
+							}
+						}
+						else if (strcmp(lineSplitMTL[0], "sound") == 0 ||
+								 strcmp(lineSplitMTL[0], "\tsound") == 0)
+						{
+							fakeTextures.back()->sound = (char)round(std::stof(lineSplitMTL[1]));
+						}
+						else if (strcmp(lineSplitMTL[0], "particle") == 0 ||
+								 strcmp(lineSplitMTL[0], "\tparticle") == 0)
+						{
+							fakeTextures.back()->particle = (char)round(std::stof(lineSplitMTL[1]));
+						}
+					}
+					free(lineSplitMTL);
+				}
+				fileMTL.close();
+			}
+		}
+		free(lineSplit);
+	}
+	file.close();
+
+	collisionModel->generateMinMaxValues();
+
+	for (FakeTexture* dummy : fakeTextures)
+	{
+		delete dummy; INCR_DEL
+	}
+
+	return collisionModel;
+}

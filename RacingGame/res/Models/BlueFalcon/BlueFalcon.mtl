@@ -1,0 +1,122 @@
+# Blender MTL File: 'None'
+# Material Count: 10
+
+newmtl M_3C776F0A_c2
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_3C776F0A_c2.png
+map_Ka BlueFalcon/M_3C776F0A_c2.png
+
+newmtl M_4471531C_c
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_4471531C_c.png
+map_Ka BlueFalcon/M_4471531C_c.png
+
+newmtl M_4F83875A_c
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_4F83875A_c.png
+map_Ka BlueFalcon/M_4F83875A_c.png
+
+newmtl M_725BFC01_c
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_725BFC01_c.png
+map_Ka BlueFalcon/M_725BFC01_c.png
+
+newmtl M_765064ED_a
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_765064ED_a.png
+map_Ka BlueFalcon/M_765064ED_a.png
+
+newmtl M_794103F_a
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_794103F_a.png
+map_Ka BlueFalcon/M_794103F_a.png
+
+newmtl M_811A6C_a
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_811A6C_a.png
+map_Ka BlueFalcon/M_811A6C_a.png
+
+newmtl M_811A6C_c
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/M_811A6C_c.png
+map_Ka BlueFalcon/M_811A6C_c.png
+
+newmtl PaintJob
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/PaintJob.png
+map_Ka BlueFalcon/PaintJob.png
+
+newmtl _auto_
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.796900 0.796900 0.796900
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 0.4
+d 1
+illum 2
+map_Kd BlueFalcon/_auto_.png
+map_Ka BlueFalcon/_auto_.png
