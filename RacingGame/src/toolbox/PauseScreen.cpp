@@ -80,7 +80,7 @@ void PauseScreen::step()
 			menuSelection = std::max(0, std::min(menuSelectionMAX, menuSelection));
 		}
 
-		if (Input::inputs.INPUT_JUMP && !Input::inputs.INPUT_PREVIOUS_JUMP)
+		if (Input::inputs.INPUT_ACTION1 && !Input::inputs.INPUT_PREVIOUS_ACTION1)
 		{
 			switch (menuDisplayID)
 			{
@@ -144,7 +144,7 @@ void PauseScreen::step()
 			}
 		}
 
-		if (Input::inputs.INPUT_ACTION && !Input::inputs.INPUT_PREVIOUS_ACTION)
+		if (Input::inputs.INPUT_ACTION2 && !Input::inputs.INPUT_PREVIOUS_ACTION2)
 		{
 			shouldPause = true;
 			//unpause();

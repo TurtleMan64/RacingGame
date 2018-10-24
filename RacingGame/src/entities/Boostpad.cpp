@@ -30,25 +30,44 @@ Boostpad::Boostpad()
 
 }
 
-Boostpad::Boostpad(float x, float y, float z, float xRot, float yRot, float zRot)
+Boostpad::Boostpad(
+	float x,     float y,     float z, 
+	float normX, float normY, float normZ,
+	float atX,   float atY,   float atZ)
 {
 	position.x = x;
 	position.y = y;
 	position.z = z;
-	rotX = xRot;
-	rotY = yRot;
-	rotZ = zRot;
 	scale = 1;
 	visible = true;
 	playerIsIn = false;
-	updateTransformationMatrix();
 
 	bolt = new Dummy(&Boostpad::modelsBolt); INCR_NEW
 	bolt->setVisible(true);
 	bolt->setPosition(&position);
-	bolt->setRotation(xRot, yRot, zRot, 0);
-	bolt->updateTransformationMatrix();
 	Main_addTransparentEntity(bolt);
+
+
+	Vector3f currNorm(normX, normY, normZ);
+	Vector3f groundSpeeds = Maths::calculatePlaneSpeed(atX, atY, atZ, &currNorm);
+	float twistAngle = Maths::toDegrees(atan2f(-groundSpeeds.z, groundSpeeds.x));
+	float nX = currNorm.x;
+	float nY = currNorm.y;
+	float nZ = currNorm.z;
+	float normHLength = sqrtf(nX*nX + nZ*nZ);
+	float pitchAngle = Maths::toDegrees(atan2f(nY, normHLength));
+	float yawAngle = Maths::toDegrees(atan2f(-nZ, nX));
+	float diff = Maths::compareTwoAngles(twistAngle, yawAngle);
+
+	rotX = diff;
+	rotY = yawAngle;
+	rotZ = pitchAngle;
+	rotRoll = 0;
+	updateTransformationMatrix();
+
+	bolt->setRotation(rotX, rotY, rotZ, 0);
+	bolt->updateTransformationMatrix();
+
 
 	//cmTransformed = loadCollisionModel("Models/Boostpad/", "Collision");
 	//CollisionChecker::addCollideModel(cmTransformed);
@@ -122,8 +141,8 @@ void Boostpad::loadStaticModels()
 	std::fprintf(stdout, "Loading Boostpad static models...\n");
 	#endif
 
-	loadObjModel(&Boostpad::modelsPad,  "res/Models/Boostpad/", "Pad.obj");
-	loadObjModel(&Boostpad::modelsBolt, "res/Models/Boostpad/", "Bolt.obj");
+	loadModel(&Boostpad::modelsPad,  "res/Models/Misc/Boostpad/", "Pad");
+	loadModel(&Boostpad::modelsBolt, "res/Models/Misc/Boostpad/", "Bolt");
 
 	if (Boostpad::cmOriginal == nullptr)
 	{

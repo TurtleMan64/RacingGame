@@ -1,6 +1,6 @@
-ThunderRoad
+Tracks/ThunderRoad
 Track
-ThunderRoad
+Tracks/ThunderRoad
 1
 Collision 8
 1.0 1.0 1.0
@@ -21,7 +21,7 @@ Collision 8
 6 0 10 0
 
 # Pass 2
-2 res/Models/ThunderRoad/ Pass2.obj
+2 res/Models/Tracks/ThunderRoad/ Pass2
 
 # Pass 3
-3 res/Models/ThunderRoad/ Pass3.obj
+3 res/Models/Tracks/ThunderRoad/ Pass3

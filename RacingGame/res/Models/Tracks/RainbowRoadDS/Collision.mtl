@@ -1,0 +1,64 @@
+# Material Count: 7
+
+newmtl ya
+Ns 17.647059
+Ni 1.000000
+Tr 1
+type wall
+scrollX 0
+scrollY 0
+map_Kd ya.png
+
+newmtl rainbow0_d
+Ns 17.647059
+Ni 1.000000
+Tr 1
+type boost
+scrollX 0
+scrollY 0
+map_Kd rainbow0_d.png
+
+newmtl rainbow0
+Ns 17.647059
+Ni 1.000000
+Tr 1
+map_d rainbow0.png
+scrollX 0
+scrollY 0
+map_Kd rainbow0.png
+
+newmtl DASH
+Ns 17.647059
+Ni 1.000000
+Tr 1
+type boost
+scrollX 0
+scrollY 0
+map_Kd DASH.png
+
+newmtl heri
+Ns 17.647059
+Ni 1.000000
+Tr 1
+scrollX 0
+scrollY 0
+map_Kd heri.png
+
+newmtl lwall
+Ns 17.647059
+Ni 1.000000
+Tr 1
+type wall
+scrollX 0
+scrollY 0
+map_Kd lwall.png
+
+newmtl lambert212
+Ns 17.647059
+Ni 1.000000
+Tr 1
+map_d lambert212.png
+scrollX 0
+scrollY 0
+map_Kd lambert212.png
+

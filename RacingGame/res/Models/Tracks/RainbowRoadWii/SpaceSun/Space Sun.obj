@@ -1,0 +1,31 @@
+# 3ds Max Wavefront OBJ Exporter v0.94b - (c)2007 guruware
+# File Created: 11.12.2010 12:51:46
+
+mtllib Space Sun.mtl
+
+#
+# object SpaceSun
+#
+
+v  0.0012 -16062.2002 -29000.0000
+v  -0.0012 16026.2002 -29000.0000
+v  0.0024 -16026.2002 29000.0000
+v  0.0000 16062.2002 29000.0000
+# 4 vertices
+
+vn 1.0000 0.0000 -0.0000
+# 1 vertex normals
+
+vt 2.0000 2.0000 2.0000
+vt 0.0000 2.0000 2.0000
+vt 2.0000 0.0000 0.0000
+vt 0.0000 0.0000 0.0000
+# 4 texture coords
+
+g SpaceSun
+usemtl _1___Default
+s off
+f -4/-4/-1 -3/-3/-1 -2/-2/-1 
+f -2/-2/-1 -3/-3/-1 -1/-1/-1 
+# 2 faces
+

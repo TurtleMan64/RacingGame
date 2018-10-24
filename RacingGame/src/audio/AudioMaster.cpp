@@ -1,7 +1,7 @@
 //To get rid of fopen error
-#ifdef _WIN32
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
+//#ifdef _WIN32
+//#define _CRT_SECURE_NO_DEPRECATE
+//#endif
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -81,11 +81,15 @@ void AudioMaster::updateListenerData(Vector3f* eye, Vector3f* target, Vector3f* 
 ALuint AudioMaster::loadOGG(const char* fileName)
 {
 	FILE* fp = nullptr;
-	fp = fopen(fileName, "rb");
+	int er = fopen_s(&fp, fileName, "rb");
 
-	if (fp == NULL)
+	if (fp == nullptr || er != 0)
 	{
-		fprintf(stdout, "Error when trying to open '%s'\n", fileName);
+		fprintf(stderr, "Error when trying to open '%s'\n", fileName);
+		if (er != 0)
+		{
+			fprintf(stderr, "fopen_s return value: %d\n", er);
+		}
 		return AL_NONE;
 	}
 
@@ -134,143 +138,6 @@ ALuint AudioMaster::loadOGG(const char* fileName)
 	buf.shrink_to_fit();
 
 	return buffer;
-}
-
-ALuint AudioMaster::loadWAV(const char* fileName)
-{
-#ifdef _WIN32
-	FILE* fp = nullptr;
-	fp = fopen(fileName, "rb");
-
-	if (fp == NULL)
-	{
-		fprintf(stdout, "Error when trying to open '%s'\n", fileName);
-		fclose(fp);
-		return AL_NONE;
-	}
-
-	char type[4];
-	DWORD size, chunkSize;
-	short formatType, channels;
-	DWORD sampleRate, avgBytesPerSec;
-	short bytesPerSample, bitsPerSample;
-	DWORD dataSize;
-
-	fread(type, sizeof(char), 4, fp);
-	if (type[0] != 'R' ||
-		type[1] != 'I' ||
-		type[2] != 'F' ||
-		type[3] != 'F')
-	{
-		fprintf(stderr, "No RIFF\n");
-		fclose(fp);
-		return 0;
-	}
-
-	fread(&size, sizeof(DWORD), 1, fp);
-	fread(type, sizeof(char), 4, fp);
-	if (type[0] != 'W' ||
-		type[1] != 'A' ||
-		type[2] != 'V' ||
-		type[3] != 'E')
-	{
-		fprintf(stderr, "not WAVE\n");
-		fclose(fp);
-		return 0;
-	}
-
-	fread(type, sizeof(char), 4, fp);
-	if (type[0] != 'f' ||
-		type[1] != 'm' ||
-		type[2] != 't' ||
-		type[3] != ' ')
-	{
-		fprintf(stderr, "not fmt\n");
-		fclose(fp);
-		return 0;
-	}
-
-	fread(&chunkSize,      sizeof(DWORD), 1, fp);
-	fread(&formatType,     sizeof(short), 1, fp);
-	fread(&channels,       sizeof(short), 1, fp);
-	fread(&sampleRate,     sizeof(DWORD), 1, fp);
-	fread(&avgBytesPerSec, sizeof(DWORD), 1, fp);
-	fread(&bytesPerSample, sizeof(short), 1, fp);
-	fread(&bitsPerSample,  sizeof(short), 1, fp);
-
-	fread(type, sizeof(char), 4, fp);
-	if (type[0] != 'd' ||
-		type[1] != 'a' ||
-		type[2] != 't' ||
-		type[3] != 'a')
-	{
-		fprintf(stderr, "Missing DATA\n");
-		fclose(fp);
-		return 0;
-	}
-
-	fread(&dataSize, sizeof(DWORD), 1, fp);
-
-	unsigned char* buf = new unsigned char[dataSize]; INCR_NEW
-	fread(buf, sizeof(BYTE), dataSize, fp);
-
-
-
-	ALuint buffer;
-	ALuint frequency = sampleRate;
-	ALenum format = 0;
-
-	alGenBuffers(1, &buffer);
-
-	switch (bitsPerSample)
-	{
-	case 8:
-		switch (channels)
-		{
-		case 1:
-			format = AL_FORMAT_MONO8;
-			break;
-
-		case 2:
-			format = AL_FORMAT_STEREO8;
-			break;
-
-		default:
-			fprintf(stderr, "unknown sound format\n");
-		}
-		break;
-
-	case 16:
-		switch (channels)
-		{
-		case 1:
-			format = AL_FORMAT_MONO16;
-			break;
-
-		case 2:
-			format = AL_FORMAT_STEREO16;
-			break;
-
-		default:
-			fprintf(stderr, "unknown sound format\n");
-		}
-		break;
-
-	default:
-		fprintf(stderr, "unknown sound format\n");
-		break;
-	}
-
-	alBufferData(buffer, format, buf, dataSize, frequency);
-
-	delete[] buf; INCR_DEL
-
-	fclose(fp);
-
-	return buffer;
-#else
-    return AL_NONE;
-#endif
 }
 
 void AudioMaster::cleanUp()

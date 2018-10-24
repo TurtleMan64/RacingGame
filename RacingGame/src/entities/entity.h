@@ -29,7 +29,7 @@ public:
 
 	virtual void step();
 
-	virtual bool isPlayer();
+	virtual bool isVehicle();
 
 	virtual bool isEmeraldPiece();
 

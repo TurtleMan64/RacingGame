@@ -17,21 +17,25 @@ float AudioPlayer::soundLevelBGM = 1.0f;
 std::vector<Source*> AudioPlayer::sources;
 std::vector<ALuint> AudioPlayer::buffersSE;
 std::vector<ALuint> AudioPlayer::buffersBGM;
-int AudioPlayer::bgmTimer = 0;
 ALuint AudioPlayer::bgmIntro;
 ALuint AudioPlayer::bgmLoop;
 
 
 void AudioPlayer::loadSoundEffects()
 {
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boostpad.ogg"));      //0
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Healpad.ogg"));       //1
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/boost_falcon.ogg"));  //2
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Intro321GO.ogg"));    //3
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/HitWall.ogg"));       //4
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Engine.ogg"));        //5
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Strafe.ogg"));        //6
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/SlipSlowdown.ogg"));  //7
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boostpad.ogg"));           //0
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Healpad.ogg"));            //1
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/boost_falcon.ogg"));       //2
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Intro321GO.ogg"));         //3
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/HitWall.ogg"));            //4
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Engine.ogg"));             //5
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Strafe.ogg"));             //6
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/SlipSlowdown.ogg"));       //7
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Danger.ogg"));             //8
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/AnnounceBoostPower.ogg")); //9
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/AnnounceFinalLap.ogg"));   //10
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/FallFemale.ogg"));         //11
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/FallMale.ogg"));           //12
 }
 
 void AudioPlayer::loadBGM(char* fileName)
@@ -138,7 +142,7 @@ Source* AudioPlayer::playBGM(int bufferLoop)
 {
 	if (bufferLoop >= (int)AudioPlayer::buffersBGM.size() || bufferLoop < 0)
 	{
-		std::fprintf(stdout, "Error: Index out of bounds on BGM buffers\n");
+		std::fprintf(stderr, "Error: Index out of bounds on BGM buffers\n");
 		return nullptr;
 	}
 
@@ -147,8 +151,6 @@ Source* AudioPlayer::playBGM(int bufferLoop)
 
 Source* AudioPlayer::playBGM(ALuint bufferLoop)
 {
-	AudioPlayer::bgmTimer = 0;
-
 	Source* src = AudioPlayer::sources[14];
 	src->stop();
 	src->setLooping(false);
@@ -173,22 +175,15 @@ Source* AudioPlayer::playBGMWithIntro(int bufferIntro, int bufferLoop)
 		bufferIntro < 0 ||
 		bufferLoop  < 0)
 	{
-		std::fprintf(stdout, "Error: Index out of bounds on BGM buffers\n");
+		std::fprintf(stderr, "Error: Index out of bounds on BGM buffers\n");
 		return nullptr;
 	}
 
 	return AudioPlayer::playBGMWithIntro(AudioPlayer::buffersBGM[bufferIntro], AudioPlayer::buffersBGM[bufferLoop]);
 }
 
-void AudioPlayer::setBGMTimer(int newTimer)
-{
-	AudioPlayer::bgmTimer = newTimer;
-}
-
 Source* AudioPlayer::playBGMWithIntro(ALuint bufferIntro, ALuint bufferLoop)
 {
-	AudioPlayer::bgmTimer = 3000; //Intro must be less than 50 seconds, Loop must be at least 50 seconds
-
 	Source* src = AudioPlayer::sources[14];
 	src->stop();
 	src->setVolume(AudioPlayer::soundLevelBGM);
@@ -217,27 +212,23 @@ Source* AudioPlayer::playBGMWithIntro(ALuint bufferIntro, ALuint bufferLoop)
 //Gets rid of the intro buffer, so that just the loop buffer loops
 void AudioPlayer::refreshBGM()
 {
-	if (AudioPlayer::bgmTimer > 0)
+	Source* src = AudioPlayer::sources[14];
+
+	if (AudioPlayer::bgmIntro != AL_NONE)
 	{
-		AudioPlayer::bgmTimer--;
-
-		Source* src = AudioPlayer::sources[14];
-
-		if (AudioPlayer::bgmTimer == 0 && AudioPlayer::bgmIntro != AL_NONE)
+		ALint currentBufferIndex;
+		alGetSourcei(src->getSourceID(), AL_BUFFERS_PROCESSED, &currentBufferIndex);
+		if (currentBufferIndex == 1)
 		{
 			alSourceUnqueueBuffers(src->getSourceID(), 1, &AudioPlayer::bgmIntro);
 			AudioPlayer::bgmIntro = AL_NONE;
 			src->setLooping(true);
 		}
-
-		ALint num;
-		alGetSourceiv(src->getSourceID(), AL_BUFFERS_QUEUED, &num);
 	}
 }
 
 void AudioPlayer::stopBGM()
 {
-	AudioPlayer::bgmTimer = 0;
 	Source* src = AudioPlayer::sources[14];
 	src->stop();
 	src->setLooping(false);
@@ -245,7 +236,7 @@ void AudioPlayer::stopBGM()
 	alSourcei(src->getSourceID(), AL_BUFFER, AL_NONE); //Get rid of queued buffers 
 
 	AudioPlayer::bgmIntro = AL_NONE;
-	AudioPlayer::bgmLoop = AL_NONE;
+	AudioPlayer::bgmLoop  = AL_NONE;
 }
 
 Source* AudioPlayer::getSource(int i)
@@ -269,7 +260,7 @@ void AudioPlayer::loadSettings()
 	std::ifstream file("Settings/AudioSettings.ini");
 	if (!file.is_open())
 	{
-		std::fprintf(stdout, "Error: Cannot load file 'Settings/AudioSettings.ini'\n");
+		std::fprintf(stderr, "Error: Cannot load file 'Settings/AudioSettings.ini'\n");
 		file.close();
 	}
 	else

@@ -31,11 +31,13 @@
     <ClCompile Include="src\engineTester\MainGameLoop.cpp" />
     <ClCompile Include="src\entities\Boostpad.cpp" />
     <ClCompile Include="src\entities\Camera.cpp" />
+    <ClCompile Include="src\entities\Checkpoint.cpp" />
     <ClCompile Include="src\entities\CollideableObject.cpp" />
     <ClCompile Include="src\entities\Dummy.cpp" />
     <ClCompile Include="src\entities\Entity.cpp" />
     <ClCompile Include="src\entities\Car.cpp" />
     <ClCompile Include="src\entities\Light.cpp" />
+    <ClCompile Include="src\entities\RainbowRoad\RR_BackgroundStars.cpp" />
     <ClCompile Include="src\entities\SkySphere.cpp" />
     <ClCompile Include="src\entities\Stage.cpp" />
     <ClCompile Include="src\entities\StagePass2.cpp" />
@@ -118,11 +120,13 @@
     <ClInclude Include="src\engineTester\main.h" />
     <ClInclude Include="src\entities\boostpad.h" />
     <ClInclude Include="src\entities\camera.h" />
+    <ClInclude Include="src\entities\checkpoint.h" />
     <ClInclude Include="src\entities\collideableobject.h" />
     <ClInclude Include="src\entities\dummy.h" />
     <ClInclude Include="src\entities\entity.h" />
     <ClInclude Include="src\entities\car.h" />
     <ClInclude Include="src\entities\light.h" />
+    <ClInclude Include="src\entities\RainbowRoad\RR_backgroundstars.h" />
     <ClInclude Include="src\entities\skysphere.h" />
     <ClInclude Include="src\entities\stage.h" />
     <ClInclude Include="src\entities\stagepass2.h" />

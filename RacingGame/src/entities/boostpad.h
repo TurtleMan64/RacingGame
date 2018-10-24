@@ -23,7 +23,10 @@ private:
 
 public:
 	Boostpad();
-	Boostpad(float x, float y, float z, float xRot, float yRot, float zRot);
+	Boostpad(
+		float x,     float y,     float z, 
+		float normX, float normY, float normZ,
+		float atX,   float atY,   float atZ);
 
 	void step();
 

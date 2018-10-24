@@ -12,12 +12,13 @@ struct InputStruct
 	volatile float INPUT_R2;
 	volatile float INPUT_L2;
 
-	volatile bool INPUT_JUMP;
-	volatile bool INPUT_ACTION;
-	volatile bool INPUT_ACTION2;
-	volatile bool INPUT_SHOULDER;
+	volatile bool INPUT_ACTION1; //A button
+	volatile bool INPUT_ACTION2; //B button
+	volatile bool INPUT_ACTION3; //X button
+	volatile bool INPUT_ACTION4; //Y button
+	volatile bool INPUT_RB;
+	volatile bool INPUT_LB;
 	volatile bool INPUT_SELECT;
-	volatile bool INPUT_SPECIAL;
 	volatile bool INPUT_START;
 
 	volatile float INPUT_PREVIOUS_X;
@@ -27,11 +28,12 @@ struct InputStruct
 	volatile float INPUT_PREVIOUS_R2;
 	volatile float INPUT_PREVIOUS_L2;
 
-	volatile bool INPUT_PREVIOUS_JUMP;
-	volatile bool INPUT_PREVIOUS_ACTION;
+	volatile bool INPUT_PREVIOUS_ACTION1;
 	volatile bool INPUT_PREVIOUS_ACTION2;
-	volatile bool INPUT_PREVIOUS_SHOULDER;
-	volatile bool INPUT_PREVIOUS_SPECIAL;
+	volatile bool INPUT_PREVIOUS_ACTION3;
+	volatile bool INPUT_PREVIOUS_ACTION4;
+	volatile bool INPUT_PREVIOUS_RB;
+	volatile bool INPUT_PREVIOUS_LB;
 	volatile bool INPUT_PREVIOUS_START;
 
 	volatile int MENU_X;

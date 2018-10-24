@@ -1,0 +1,32 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl milky
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.627451 0.627451 0.627451
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 0
+Tr 0
+d 0.000000
+glow 1.0
+illum 2
+map_Kd milky.png
+map_Ka milky.png
+map_d milky.png
+
+newmtl milky2
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.627451 0.627451 0.627451
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 0
+d 0.000000
+glow 1.0
+Tr 0
+illum 2
+map_Kd milky2.png
+map_Ka milky2.png
+map_d milky2.png

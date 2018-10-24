@@ -105,7 +105,7 @@ void Fbo::determineDrawBuffers()
 		drawBuffers.push_back(GL_COLOR_ATTACHMENT1);
 	}
 
-	glDrawBuffers(drawBuffers.size(), &drawBuffers[0]);
+	glDrawBuffers((int)drawBuffers.size(), &drawBuffers[0]);
 }
 
 void Fbo::createTextureAttachment()

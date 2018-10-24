@@ -141,10 +141,12 @@ Matrix4f Maths::lookAt(Vector3f* eye, Vector3f* focus, Vector3f* up)
 // a third vector that is perpendicular to both
 Vector3f Maths::calcThirdAxis(Vector3f* A, Vector3f* B)
 {
-	float third[3];
-	rotatePoint(third, 0, 0, 0, A->x, A->y, A->z, B->x, B->y, B->z, -(M_PI/2));
+	//float third[3];
+	//rotatePoint(third, 0, 0, 0, A->x, A->y, A->z, B->x, B->y, B->z, -(M_PI/2));
 
-	return Vector3f(third[0], third[1], third[2]);
+	//return Vector3f(third[0], third[1], third[2]);
+
+	return B->cross(A);
 }
 
 //Given a basis {v1, v2, v3}, computes the coordinate vector

@@ -18,6 +18,7 @@
 #include "../fontMeshCreator/guinumber.h"
 #include "../toolbox/split.h"
 #include "../audio/source.h"
+#include "checkpoint.h"
 
 #include <list>
 #include <iostream>
@@ -56,10 +57,31 @@ void Car::step()
 	canMoveTimer    = std::fmaxf(0.0f, canMoveTimer    - dt);
 	boostDelayTimer = std::fmaxf(0.0f, boostDelayTimer - dt);
 	slipTimer       = std::fmaxf(0.0f, slipTimer       - dt);
+	spinTimer       = std::fmaxf(0.0f, spinTimer       - dt);
+	sideAttackTimer = std::fmaxf(0.0f, sideAttackTimer - dt);
+
+	if (deadTimer >= 0.0f)
+	{
+		deadTimer += dt;
+	}
+
+	if (fallOutTimer >= 0.0f)
+	{
+		fallOutTimer += dt;
+	}
 
 	setInputs();
 
 	//Vector3f prevPos(&position);
+
+	//Spin attack
+	if (onPlane && inputAttackSpin && !inputAttackSpinPrevious)
+	{
+		if (spinTimer == 0.0f)
+		{
+			spinTimer = spinTimeDelay;
+		}
+	}
 
 	//Slipping
 	if (Input::inputs.INPUT_L2 > 0.5f && 
@@ -125,12 +147,16 @@ void Car::step()
 
 	if (slipTimerRight+slipTimerLeft < slipTimerThreshold)
 	{
-		slipPunishScale = -slipPunishScale;
+		slipPunishScale = -slipPunishScale*slipPositivePower;
+	}
+	else
+	{
+		slipPunishScale = slipPunishScale*slipNegativePower;
 	}
 	
 	//turn due to slipping
 	float xIn2 = -slipPower*(slipAngle/slipAngleMax)*dt;
-	vel.scale(1 - slipPunishScale*(std::fabsf(xIn2))); //slow down
+	vel.scale(1 - slipPunishScale*(std::fabsf((slipAngle/slipAngleMax)*dt))); //slow down
 	float u2 = currNorm.x;
 	float v2 = currNorm.y;
 	float w2 = currNorm.z;
@@ -142,33 +168,93 @@ void Car::step()
 	vel.x = result2[0];
 	vel.y = result2[1];
 	vel.z = result2[2];
-
+	
 
 	//Strafing
-	Vector3f strafeDir = currNorm.cross(&vel);
+	Vector3f upDir5(&currNorm);
+	Vector3f atDir5(&vel);
+	Vector3f rightDir5 = atDir5.cross(&upDir5);
+	upDir5 = rightDir5.cross(&atDir5);
+
+	//Vector3f perpen5 = vel.cross(&currNorm);
+
+	float u5 = upDir5.x;
+	float v5 = upDir5.y;
+	float w5 = upDir5.z;
+	float x5 = atDir5.x;
+	float y5 = atDir5.y;
+	float z5 = atDir5.z;
+	float buf5[3];
+	Maths::rotatePoint(buf5, 0, 0, 0, u5, v5, w5, x5, y5, z5, Maths::toRadians(-slipAngle));
+	atDir5.set(buf5[0], buf5[1], buf5[2]);
+
+	u5 = atDir5.x;
+	v5 = atDir5.y;
+	w5 = atDir5.z;
+	x5 = rightDir5.x;
+	y5 = rightDir5.y;
+	z5 = rightDir5.z;
+	Maths::rotatePoint(buf5, 0, 0, 0, u5, v5, w5, x5, y5, z5, Maths::toRadians(0));
+	Vector3f strafeDir(buf5[0], buf5[1], buf5[2]);
 	strafeDir.normalize();
+
 	Vector3f strafeRAmount(&strafeDir);
 	Vector3f strafeLAmount(&strafeDir);
-	strafeRAmount.scale(-inputR);
-	strafeLAmount.scale( inputL);
+	strafeRAmount.scale( inputR);
+	strafeLAmount.scale(-inputL);
 	Vector3f totalStrafe = (strafeRAmount + strafeLAmount);
 	totalStrafe.scale(strafePercentage);
 	totalStrafe.scale(vel.length());
-	float strafeScale = std::fabsf(inputL-inputR);
+	float strafeScale = std::fabsf(inputR-inputL);
 	float strafePunish = 1.0f - strafeScale*(1.0f - strafeTerminalPunish);
+
+	//Side attack
+	if (onPlane && inputAttackSide && !inputAttackSidePrevious)
+	{
+		if (sideAttackTimer == 0.0f && fabsf(inputWheel) > 0.2f && vel.length() > 5.0f)
+		{
+			sideAttackTimer = sideAttackTimeMax;
+			sideAttackDir = -1.0f;
+			if (inputWheel > 0)
+			{
+				sideAttackDir = 1.0f;
+			}
+		}
+	}
+
+	Vector3f sideAttackVel(&strafeDir);
+	if (sideAttackTimer > 0)
+	{
+		sideAttackVel.scale(sideAttackDir*sideAttackSpeed*(sideAttackTimer/sideAttackTimeMax));
+	}
+	else
+	{
+		sideAttackVel.set(0, 0, 0);
+	}
 
 
 	//Boost
-	if (inputBoost && !inputBoostPrevious)
+	if (inputBoost && !inputBoostPrevious && currentLap >= 1)
 	{
-		if (boostDelayTimer == 0.0f && onPlane)
+		if (boostDelayTimer == 0.0f && onPlane && health > 0.0f)
 		{
 			AudioPlayer::play(2, getPosition());
 
-			boostDelayTimer = boostDelayMax;
+			float boostRatio = 1.0f;
+			if (health < boostHealthPunish)
+			{
+				boostRatio = health/boostHealthPunish;
+				health = 0.0f;
+			}
+			else
+			{
+				health -= boostHealthPunish;
+			}
+
+			boostDelayTimer = boostDelayMax*boostRatio;
 
 			float oldSpeed = vel.length();
-			float newSpeed = oldSpeed + boostKick*(boostSpeed - oldSpeed);
+			float newSpeed = oldSpeed + boostKick*boostRatio*(boostSpeed - oldSpeed);
 
 			if (newSpeed > oldSpeed)
 			{
@@ -180,10 +266,25 @@ void Car::step()
 		}
 	}
 
+	if (onPlane && currentTriangle->isMiniBoost())
+	{
+		if (boostDelayTimer == 0.0f)
+		{
+			AudioPlayer::play(0, getPosition());
+		}
+		boostDelayTimer = (boostDuration)*.1f + (boostDelayMax-boostDuration);
+	}
+
 	float brakePunish = 1.0f;
 	if (onPlane && currentTriangle->isBrake())
 	{
 		brakePunish = 0.5f;
+	}
+
+	float spinPunish = 1.0f;
+	if (spinTimer > spinTimeDelay-spinTimeMax)
+	{
+		spinPunish = 0.5f;
 	}
 
 	//Accelerate/Brake/Coast
@@ -197,7 +298,7 @@ void Car::step()
 			terminal = boostSpeed;
 		}
 
-		float newSpeed = Maths::approach(oldSpeed, terminal*strafePunish*brakePunish, terminalAccelGas, dt);
+		float newSpeed = Maths::approach(oldSpeed, terminal*strafePunish*brakePunish*spinPunish, terminalAccelGas, dt);
 
 		float ratio = newSpeed/oldSpeed;
 		vel.x*=ratio;
@@ -207,7 +308,7 @@ void Car::step()
 	else if (inputBrake && onPlane)
 	{
 		float oldSpeed = vel.length();
-		float newSpeed = Maths::approach(oldSpeed, 0, terminalAccelBrake/brakePunish, dt);
+		float newSpeed = Maths::approach(oldSpeed, 0, (terminalAccelBrake/brakePunish)/spinPunish, dt);
 		if (newSpeed <= VEL_SLOWEST)
 		{
 			vel.normalize();
@@ -224,7 +325,7 @@ void Car::step()
 	else
 	{
 		float oldSpeed = vel.length();
-		float newSpeed = Maths::approach(oldSpeed, 0, terminalAccelCoast/brakePunish, dt);
+		float newSpeed = Maths::approach(oldSpeed, 0, (terminalAccelCoast/brakePunish)/spinPunish, dt);
 		if (newSpeed <= VEL_SLOWEST)
 		{
 			vel.normalize();
@@ -324,7 +425,7 @@ void Car::step()
 	}
 
 
-	Vector3f overallVel = vel + totalStrafe;
+	Vector3f overallVel = vel + totalStrafe + sideAttackVel;
 
 	//speed before adjusting
 	float originalSpeed = vel.length();
@@ -336,34 +437,61 @@ void Car::step()
 
 		if (onPlane  == false) //Air to ground
 		{
-			currentTriangle = CollisionChecker::getCollideTriangle();
-			Vector3f newDirection = Maths::projectOntoPlane(&vel, colNormal);
-			if (newDirection.lengthSquared() != 0)
+			if (CollisionChecker::getCollideTriangle()->isWall())
 			{
-				if (newDirection.length() < VEL_SLOWEST)
+				Vector3f newDirection = Maths::projectOntoPlane(&vel, colNormal);
+				if (newDirection.lengthSquared() != 0)
 				{
-					newDirection.normalize();
-					newDirection.scale(VEL_SLOWEST);
+					if (newDirection.length() < VEL_SLOWEST)
+					{
+						newDirection.normalize();
+						newDirection.scale(VEL_SLOWEST);
+					}
+					vel.set(&newDirection);
 				}
-				vel.set(&newDirection);
+
+				setPosition(CollisionChecker::getCollidePosition());
+				increasePosition(colNormal->x*FLOOR_OFFSET, colNormal->y*FLOOR_OFFSET, colNormal->z*FLOOR_OFFSET);
 			}
+			else
+			{
+				currentTriangle = CollisionChecker::getCollideTriangle();
+				Vector3f newDirection = Maths::projectOntoPlane(&vel, colNormal);
+				if (newDirection.lengthSquared() != 0)
+				{
+					if (newDirection.length() < VEL_SLOWEST)
+					{
+						newDirection.normalize();
+						newDirection.scale(VEL_SLOWEST);
+					}
+					vel.set(&newDirection);
+				}
 
-			setPosition(CollisionChecker::getCollidePosition());
-			increasePosition(colNormal->x*FLOOR_OFFSET, colNormal->y*FLOOR_OFFSET, colNormal->z*FLOOR_OFFSET);
+				setPosition(CollisionChecker::getCollidePosition());
+				increasePosition(colNormal->x*FLOOR_OFFSET, colNormal->y*FLOOR_OFFSET, colNormal->z*FLOOR_OFFSET);
 
-			currNorm.set(colNormal);
+				currNorm.set(colNormal);
+			}
 		}
 		else //Ground to a different triangle
 		{
 			//check if you can smoothly transition from previous triangle to this triangle
 			float dotProduct = currNorm.dot(colNormal);
-			if (dotProduct < smoothTransitionThreshold)
+			if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall())
 			{
 				Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
 				Vector3f newDir = bounceVec + bounceVec + overallVel;
 				newDir.normalize();
-				newDir.scale(originalSpeed*0.75f);
+				Vector3f proj = Maths::projectOntoPlane(&overallVel, colNormal);
+				float newSpeed = std::max(proj.length()*0.75f, VEL_SLOWEST);
+				newDir.scale(newSpeed);
 				vel.set(&newDir);
+
+				Vector3f overallVelNorm(&overallVel);
+				overallVelNorm.normalize();
+				float speedFactor = overallVel.length()/terminalSpeed;
+				float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
+				health -= hitWallHealthPunish*angleFactor*speedFactor;
 
 				canMoveTimer = hitWallTimePunish;
 				AudioPlayer::play(4, getPosition());
@@ -418,13 +546,21 @@ void Car::step()
 
 						//check if you can smoothly transition from previous triangle to this triangle
 						dotProduct = currNorm.dot(colNormal);
-						if (dotProduct < smoothTransitionThreshold)
+						if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall())
 						{
-							Vector3f bounceVec = Maths::bounceVector(&nextVel, colNormal, 1.0f);
-							Vector3f newDir = bounceVec + bounceVec + nextVel;
+							Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
+							Vector3f newDir = bounceVec + bounceVec + overallVel;
 							newDir.normalize();
-							newDir.scale(originalSpeed*0.75f);
+							Vector3f proj = Maths::projectOntoPlane(&overallVel, colNormal);
+							float newSpeed = std::max(proj.length()*0.75f, VEL_SLOWEST);
+							newDir.scale(newSpeed);
 							vel.set(&newDir);
+
+							Vector3f overallVelNorm(&overallVel);
+							overallVelNorm.normalize();
+							float speedFactor = overallVel.length()/terminalSpeed;
+							float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
+							health -= hitWallHealthPunish*angleFactor*speedFactor;
 
 							canMoveTimer = hitWallTimePunish;
 							AudioPlayer::play(4, getPosition());
@@ -498,7 +634,7 @@ void Car::step()
 		{
 			float dotProduct = currNorm.dot(&(CollisionChecker::getCollideTriangle()->normal));
 
-			if (dotProduct < smoothTransitionThreshold) //It's a wall, pretend the collision check didn't see it
+			if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall()) //It's a wall, pretend the collision check didn't see it
 			{
 				Vector3f perpen = Maths::calcThirdAxis(&vel, &currNorm);
 				Vector3f coordsFlat = Maths::coordinatesRelativeToBasis(&vel, &currNorm, &perpen, &(CollisionChecker::getCollideTriangle()->normal));
@@ -515,13 +651,23 @@ void Car::step()
 			Vector3f* colNormal = &CollisionChecker::getCollideTriangle()->normal;
 
 			float dotProduct = currNorm.dot(&(CollisionChecker::getCollideTriangle()->normal));
-			if (dotProduct < smoothTransitionThreshold)
+			if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall())
 			{
 				CollisionChecker::falseAlarm();
+
 				Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
 				Vector3f newDir = bounceVec + bounceVec + overallVel;
-				newDir.scale(0.25f);
+				newDir.normalize();
+				Vector3f proj = Maths::projectOntoPlane(&overallVel, colNormal);
+				float newSpeed = std::max(proj.length()*0.75f, VEL_SLOWEST);
+				newDir.scale(newSpeed);
 				vel.set(&newDir);
+
+				Vector3f overallVelNorm(&overallVel);
+				overallVelNorm.normalize();
+				float speedFactor = overallVel.length()/terminalSpeed;
+				float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
+				health -= hitWallHealthPunish*angleFactor*speedFactor;
 
 				canMoveTimer = hitWallTimePunish;
 				AudioPlayer::play(4, getPosition());
@@ -623,6 +769,13 @@ void Car::step()
 
 	//animating the vehicle
 
+	float spinRot = 0.0f;
+	if (spinTimer > spinTimeDelay-spinTimeMax)
+	{
+		float tim = (spinTimer - (spinTimeDelay-spinTimeMax));
+		spinRot = 500*tim*tim;
+	}
+
 	if (onPlane)
 	{
 		Vector3f groundSpeeds = Maths::calculatePlaneSpeed(vel.x, vel.y, vel.z, &currNorm);
@@ -636,7 +789,7 @@ void Car::step()
 		float yawAngle = Maths::toDegrees(atan2f(-nZ, nX));
 		float diff = Maths::compareTwoAngles(twistAngle, yawAngle);
 
-		rotX = diff - slipAngle;
+		rotX = diff - slipAngle + spinRot;
 		rotY = yawAngle;
 		rotZ = pitchAngle;
 		rotRoll = 10*(inputL - inputR)*(vel.length()/terminalSpeed);
@@ -653,7 +806,7 @@ void Car::step()
 		float pitchAngle  = Maths::toDegrees(atan2f(diffY, normHLength));
 		float yawAngle = Maths::toDegrees(atan2f(-diffZ, diffX));
 
-		rotX = 0;
+		rotX = 0 + spinRot;
 		rotY = yawAngle;
 		rotZ = pitchAngle+90;
 		rotRoll = 10*(inputL - inputR)*(vel.length()/terminalSpeed);
@@ -685,7 +838,7 @@ void Car::step()
 		Vector3f rightDir = atDir.cross(&upDir);
 		upDir = rightDir.cross(&atDir);
 
-		Vector3f perpen = vel.cross(&currNorm);
+		//Vector3f perpen = vel.cross(&currNorm);
 
 		float u3 = upDir.x;
 		float v3 = upDir.y;
@@ -694,7 +847,7 @@ void Car::step()
 		float y3 = atDir.y;
 		float z3 = atDir.z;
 		float buf[3];
-		Maths::rotatePoint(buf, 0, 0, 0, u3, v3, w3, x3, y3, z3, Maths::toRadians(-slipAngle));
+		Maths::rotatePoint(buf, 0, 0, 0, u3, v3, w3, x3, y3, z3, Maths::toRadians(spinRot - slipAngle));
 		atDir.set(buf[0], buf[1], buf[2]);
 
 		u3 = atDir.x;
@@ -795,7 +948,15 @@ void Car::step()
 	Maths::rotatePoint(newUp, 0, 0, 0, rotationVector[0], rotationVector[1], rotationVector[2], up.x, up.y, up.z, camAngleLookdown+camAngleAdditionalLookdown);
 	up.set(newUp[0], newUp[1], newUp[2]);
 
-	Global::gameCamera->setViewMatrixValues(&eye, &target, &up);
+	if (fallOutTimer < 0.0f)
+	{
+		Global::gameCamera->setViewMatrixValues(&eye, &target, &up);
+		camDeathPosition.set(&eye);
+	}
+	else
+	{
+		Global::gameCamera->setViewMatrixValues(&camDeathPosition, &target, &up);
+	}
 
 	Global::gameMainVehicleSpeed = (int)(overallVel.length()*3.46f);
 
@@ -804,9 +965,23 @@ void Car::step()
 
 
 
+	if (health < 0)
+	{
+		if (deadTimer < 0.0f)
+		{
+			deadTimer = 0.0f;
+		}
+	}
+	if (onPlane && currentTriangle->isHeal() && deadTimer < 0.0f)
+	{
+		health += healRate*dt;
+	}
+	health = std::fminf(1.0f, health);
+
+
 	//Sound effect stuff
 
-	if (onPlane && overallVel.length() > 10)
+	if (overallVel.length() > 10)
 	{
 		if (sourceEngine == nullptr)
 		{
@@ -874,6 +1049,53 @@ void Car::step()
 			sourceSlipSlowdown = nullptr;
 		}
 	}
+
+	if (health >= 0.0f && health <= 0.3f)
+	{
+		if (sourceDanger == nullptr)
+		{
+			sourceDanger = AudioPlayer::play(8, &position, 1.9f - 3*health, true);
+		}
+
+		if (sourceDanger != nullptr)
+		{
+			sourceDanger->setPitch(1.9f - 3*health);
+			sourceDanger->setPosition(getX(), getY(), getZ());
+		}
+	}
+	else
+	{
+		if (sourceDanger != nullptr)
+		{
+			sourceDanger->stop();
+			sourceDanger = nullptr;
+		}
+	}
+
+	if (onPlane && currentTriangle->isHeal())
+	{
+		if (sourceHeal == nullptr)
+		{
+			sourceHeal = AudioPlayer::play(1, &position, 1.0f, true);
+		}
+	}
+	else
+	{
+		if (sourceHeal != nullptr)
+		{
+			sourceHeal->stop();
+			sourceHeal = nullptr;
+		}
+	}
+
+	checkpointTest();
+
+	Vector3f vnorm(&vel);
+	vnorm.normalize();
+	//std::fprintf(stdout, "pos  = [%f, %f, %f]\n", position.x, position.y, position.z);
+	//std::fprintf(stdout, "norm = [%f, %f, %f]\n", currNorm.x, currNorm.y, currNorm.z);
+	//std::fprintf(stdout, "dir  = [%f, %f, %f]\n", vnorm   .x, vnorm   .y, vnorm   .z);
+	//std::fprintf(stdout, "%f %f %f   %f %f %f   %f %f %f\n", position.x, position.y, position.z, currNorm.x, currNorm.y, currNorm.z, vnorm.x, vnorm.y, vnorm.z);
 }
 
 void Car::createEngineParticles(Vector3f* initPos, Vector3f* endPos, float initialScale, int count, int textureIndex)
@@ -899,6 +1121,88 @@ void Car::createEngineParticles(Vector3f* initPos, Vector3f* endPos, float initi
 
 		new Particle(textureIndex, &offset, 1.0f, initialScale*newScale, true);
 	}
+}
+
+void Car::checkpointTest()
+{
+	if (fallOutTimer >= 0.0f)
+	{
+		return;
+	}
+
+	Checkpoint* myCheck = nullptr;
+	int newCheckpointID = -1;
+	for (Checkpoint* check : Global::gameCheckpointList)
+	{
+		if (check->isPointInsideMe(getPosition()))
+		{
+			newCheckpointID = check->ID;
+			myCheck = check;
+		}
+	}
+
+	if (newCheckpointID == -1 && fallOutTimer < 0.0f)
+	{
+		//AudioPlayer::play(12, getPosition());
+		//fallOutTimer = 0.0f;
+	}
+
+	if (newCheckpointID != -1 && newCheckpointID != lastCheckpointID)
+	{
+		int diff = newCheckpointID-lastCheckpointID;
+		if (newCheckpointID == 0 && lastCheckpointID == Global::gameCheckpointLast)
+		{
+			diff = 1;
+		}
+		if (newCheckpointID == Global::gameCheckpointLast && lastCheckpointID == 0)
+		{
+			diff = -1;
+		}
+
+		if (abs(diff) >= 2)
+		{
+			AudioPlayer::play(12, getPosition());
+			fallOutTimer = 0.0f;
+		}
+
+		lapDistance+=diff;
+
+		if (lapDistance < 0)
+		{
+			currentLap--;
+			lapDistance = Global::gameCheckpointLast;
+		}
+		else if (lapDistance > Global::gameCheckpointLast)
+		{
+			currentLap++;
+			lapDistance = 0;
+
+			switch (currentLap)
+			{
+				case 1:
+					AudioPlayer::play(9,  getPosition());
+					break;
+
+				case 2:
+					AudioPlayer::play(10, getPosition());
+					AudioPlayer::playBGMWithIntro(2, 3);
+					break;
+
+				case 3:
+					//AudioPlayer::playBGMWithIntro(2, 3);
+					break;
+
+				default: break;
+			}
+		}
+	}
+
+	if (newCheckpointID != -1)
+	{
+		lastCheckpointID = newCheckpointID;
+	}
+
+	//std::fprintf(stdout, "currentLap = %d    lapDistance = %d    checkID = %d\n", currentLap, lapDistance, newCheckpointID);
 }
 
 void Car::giveMeABoost()
@@ -929,37 +1233,50 @@ void Car::setCanMoveTimer(float newTimer)
 	canMoveTimer = newTimer;
 }
 
+void Car::setLapDistance(int newDistance)
+{
+	lapDistance = newDistance;
+}
+
 void Car::setInputs()
 {
-	inputGas   = Input::inputs.INPUT_JUMP;
-	inputBrake = Input::inputs.INPUT_ACTION;
-	inputBoost = Input::inputs.INPUT_SPECIAL;
-	inputWheel = Input::inputs.INPUT_X;
-	inputDive  = Input::inputs.INPUT_Y;
-	inputL     = Input::inputs.INPUT_L2;
-	inputR     = Input::inputs.INPUT_R2;
+	inputGas        = Input::inputs.INPUT_ACTION1;
+	inputBrake      = Input::inputs.INPUT_ACTION2;
+	inputAttackSide = Input::inputs.INPUT_ACTION3;
+	inputBoost      = Input::inputs.INPUT_ACTION4;
+	inputAttackSpin = Input::inputs.INPUT_RB;
+	inputWheel      = Input::inputs.INPUT_X;
+	inputDive       = Input::inputs.INPUT_Y;
+	inputL          = Input::inputs.INPUT_L2;
+	inputR          = Input::inputs.INPUT_R2;
 
 	inputWheelJerk = Input::inputs.INPUT_X - Input::inputs.INPUT_PREVIOUS_X;
 
-	inputGasPrevious   = Input::inputs.INPUT_PREVIOUS_JUMP;
-	inputBrakePrevious = Input::inputs.INPUT_PREVIOUS_ACTION;
-	inputBoostPrevious = Input::inputs.INPUT_PREVIOUS_SPECIAL;
+	inputGasPrevious        = Input::inputs.INPUT_PREVIOUS_ACTION1;
+	inputBrakePrevious      = Input::inputs.INPUT_PREVIOUS_ACTION2;
+	inputAttackSidePrevious = Input::inputs.INPUT_PREVIOUS_ACTION3;
+	inputBoostPrevious      = Input::inputs.INPUT_PREVIOUS_ACTION4;
+	inputAttackSpinPrevious = Input::inputs.INPUT_PREVIOUS_RB;
 
-	if (canMoveTimer > 0.0f)
+	if (canMoveTimer > 0.0f || deadTimer >= 0.0f || fallOutTimer >= 0.0f)
 	{
-		inputGas   = 0;
-		inputBrake = 0;
-		inputBoost = 0;
-		inputWheel = 0;
-		inputDive  = 0;
-		inputL     = 0;
-		inputR     = 0;
+		inputGas        = 0;
+		inputBrake      = 0;
+		inputBoost      = 0;
+		inputWheel      = 0;
+		inputDive       = 0;
+		inputL          = 0;
+		inputR          = 0;
+		inputAttackSpin = 0;
+	    inputAttackSide = 0;
 
 		inputWheelJerk = 0;
 
-		inputGasPrevious   = 0;
-		inputBrakePrevious = 0;
-		inputBoostPrevious = 0;
+		inputGasPrevious        = 0;
+		inputBrakePrevious      = 0;
+		inputBoostPrevious      = 0;
+		inputAttackSidePrevious = 0;
+		inputAttackSpinPrevious = 0;
 	}
 }
 
@@ -975,15 +1292,15 @@ void Car::loadVehicleInfo()
 		std::string engineFilename = "";
 		switch (vehicleID)
 		{
-			case 0: engineFilename = "res/Models/BlueFalcon/Engine.ini"; break;
-			case 1: engineFilename = "res/Models/Arwing/Engine.ini";     break;
+			case 0: engineFilename = "res/Models/Machines/BlueFalcon/Engine.ini"; break;
+			case 1: engineFilename = "res/Models/Machines/Arwing/Engine.ini";     break;
 			default: break;
 		}
 
 		std::ifstream file(engineFilename);
 		if (!file.is_open())
 		{
-			std::fprintf(stdout, "Error: Cannot load file '%s'\n", engineFilename.c_str());
+			std::fprintf(stderr, "Error: Cannot load file '%s'\n", engineFilename.c_str());
 			file.close();
 		}
 		else
@@ -1030,11 +1347,11 @@ void Car::loadVehicleInfo()
 	std::string modelName = "";
 	switch (vehicleID)
 	{
-		case 0: modelFolder = "res/Models/BlueFalcon/"; modelName = "BlueFalcon.obj"; break;
-		case 1: modelFolder = "res/Models/Arwing/";     modelName = "Arwing.obj";     break;
+		case 0: modelFolder = "res/Models/Machines/BlueFalcon/"; modelName = "BlueFalcon"; break;
+		case 1: modelFolder = "res/Models/Machines/Arwing/";     modelName = "Arwing";     break;
 		default: break;
 	}
-	loadObjModel(&Car::models[vehicleID], modelFolder, modelName);
+	loadModel(&Car::models[vehicleID], modelFolder, modelName);
 }
 
 void Car::deleteStaticModels()
@@ -1053,3 +1370,7 @@ void Car::deleteStaticModels()
 	}
 }
 
+bool Car::isVehicle()
+{
+	return true;
+}

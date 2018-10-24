@@ -21,12 +21,14 @@ SkySphere::SkySphere()
 	position.x = 0;
 	position.y = 0;
 	position.z = 0;
+	rotY = 0;
 	followsY = false;
+	visible = true;
 }
 
 void SkySphere::step()
 {
-	setRotY(SkyManager::getTimeOfDay());
+	//setRotY(SkyManager::getTimeOfDay());
 	//if (Global::gamePlayer != nullptr) 
 	{
 		//game player was somtimes deallocated but not null? now i just set it in the player
@@ -71,7 +73,10 @@ void SkySphere::loadModels(char* folder, char* objname, char* mtlname)
 	std::string mtlfilename = mtlname;
 	mtlfilename = mtlfilename + ".mtl";
 
-	loadObjModelWithMTL(&SkySphere::models, path.c_str(), objfilename.c_str(), mtlfilename.c_str());
+	if (loadBinaryModelWithMTL(&SkySphere::models, path.c_str(), objfilename.c_str(), mtlfilename.c_str()) != 0)
+	{
+		loadObjModelWithMTL(&SkySphere::models, path.c_str(), objfilename.c_str(), mtlfilename.c_str());
+	}
 }
 
 void SkySphere::deleteModels()

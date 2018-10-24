@@ -47,7 +47,7 @@ void Entity::step()
 
 }
 
-bool Entity::isPlayer()
+bool Entity::isVehicle()
 {
 	return false;
 }

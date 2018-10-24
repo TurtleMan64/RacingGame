@@ -3,6 +3,7 @@
 #include <cstring>
 #include <fstream>
 #include <AL/al.h>
+#include <list>
 
 #include <chrono>
 #include <thread>
@@ -28,6 +29,8 @@
 #include "../entities/car.h"
 #include "../entities/boostpad.h"
 #include "../entities/camera.h"
+#include "../entities/RainbowRoad/RR_backgroundstars.h"
+#include "../entities/checkpoint.h"
 
 void LevelLoader::loadTitle()
 {
@@ -49,6 +52,12 @@ void LevelLoader::loadTitle()
 	Main_deleteAllEntitesPass2();
 	Main_deleteAllEntitesPass3();
 	Main_deleteAllTransparentEntites();
+
+	for (Checkpoint* check : Global::gameCheckpointList)
+	{
+		delete check; INCR_DEL
+	}
+	Global::gameCheckpointList.clear();
 
 	AudioPlayer::stopBGM();
 	AudioPlayer::deleteBuffersBGM();
@@ -142,6 +151,12 @@ void LevelLoader::loadLevel(std::string levelFilename)
 	Main_deleteAllEntitesPass3();
 	Main_deleteAllTransparentEntites();
 
+	for (Checkpoint* check : Global::gameCheckpointList)
+	{
+		delete check; INCR_DEL
+	}
+	Global::gameCheckpointList.clear();
+
 	if (stageFault == 1)
 	{
 		Stage::deleteModels(); //Only delete stage if loading a new stage
@@ -158,10 +173,10 @@ void LevelLoader::loadLevel(std::string levelFilename)
 		return;
 	}
 
+	AudioPlayer::stopBGM();
 	//Delete existing bgm if loading a new stage
 	if (stageFault == 1)
 	{
-		AudioPlayer::stopBGM();
 		AudioPlayer::deleteBuffersBGM();
 	}
 
@@ -213,7 +228,7 @@ void LevelLoader::loadLevel(std::string levelFilename)
 
 
 
-			CollisionModel* colModel = loadCollisionModel("Models/" + colFLoc + "/", lineSplit[0]);
+			CollisionModel* colModel = loadBinaryCollisionModel("Models/" + colFLoc + "/", lineSplit[0]);
 			colModel->generateQuadTree(std::stoi(lineSplit[1]));
 			CollisionChecker::addCollideModel(colModel);
 
@@ -488,6 +503,28 @@ void LevelLoader::loadLevel(std::string levelFilename)
 	GuiManager::setTimer(0);
 	GuiManager::stopTimer();
 
+	int maxNumber = -1;
+	for (Checkpoint* check : Global::gameCheckpointList)
+	{
+		if (check->ID > maxNumber)
+		{
+			maxNumber = check->ID;
+		}
+	}
+	Global::gameCheckpointLast = maxNumber;
+
+
+	extern std::unordered_map<Entity*, Entity*> gameEntities;
+
+	for (auto e : gameEntities)
+	{
+		if (e.first->isVehicle())
+		{
+			((Car*)e.first)->setLapDistance(maxNumber);
+		}
+	}
+		
+
 	if (Global::spawnAtCheckpoint)
 	{
 		//GuiManager::setTimer(Global::checkpointTimeMin, Global::checkpointTimeSec, Global::checkpointTimeCen);
@@ -555,7 +592,7 @@ void LevelLoader::processLine(char** dat, int /*datLength*/)
 
 		case 6: //Car
 		{
-			Car* car = new Car(0, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
+			Car* car = new Car(1, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
 			Global::gameMainVehicle = car;
 			Main_addEntity(car);
 			return;
@@ -575,8 +612,28 @@ void LevelLoader::processLine(char** dat, int /*datLength*/)
 			Boostpad::loadStaticModels();
 			Boostpad* pad = new Boostpad(
 				toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]),
-				toFloat(dat[4]), toFloat(dat[5]), toFloat(dat[6])); INCR_NEW
+				toFloat(dat[4]), toFloat(dat[5]), toFloat(dat[6]),
+				toFloat(dat[7]), toFloat(dat[8]), toFloat(dat[9])); INCR_NEW
 			Main_addTransparentEntity(pad);
+			return;
+		}
+
+		case 9: //RR_BackgroundStars
+		{
+			RR_BackgroundStars::loadModels();
+			RR_BackgroundStars* stars = new RR_BackgroundStars; INCR_NEW
+			Main_addEntity(stars);
+			return;
+		}
+
+		case 10: //Checkpoint
+		{
+			Checkpoint::loadStaticModels();
+			Checkpoint* checkpoint = new Checkpoint(
+				toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]),
+				toFloat(dat[4]), toFloat(dat[5]), toFloat(dat[6]),
+				toFloat(dat[7]), toInt(dat[8])); INCR_NEW
+			Global::gameCheckpointList.push_back(checkpoint);
 			return;
 		}
 
@@ -669,4 +726,6 @@ void LevelLoader::freeAllStaticModels()
 	SkySphere::deleteModels();
 	Boostpad::deleteStaticModels();
 	Car::deleteStaticModels();
+	RR_BackgroundStars::deleteModels();
+	Checkpoint::deleteStaticModels();
 }

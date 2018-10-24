@@ -70,6 +70,9 @@
     <Filter Include="Source Files\toolbox">
       <UniqueIdentifier>{c74444d0-8b52-463a-a000-a59cc5b0cad5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\entities\RainbowRoad">
+      <UniqueIdentifier>{406b3e41-9e78-4d1c-a55c-2a0445414e48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -327,6 +330,12 @@
     <ClCompile Include="src\fontMeshCreator\GUINumber.cpp">
       <Filter>Source Files\fontMeshCreator</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\RainbowRoad\RR_BackgroundStars.cpp">
+      <Filter>Source Files\entities\RainbowRoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\Checkpoint.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio\audiomaster.h">
@@ -568,6 +577,12 @@
     </ClInclude>
     <ClInclude Include="src\fontMeshCreator\guinumber.h">
       <Filter>Source Files\fontMeshCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\RainbowRoad\RR_backgroundstars.h">
+      <Filter>Source Files\entities\RainbowRoad</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\checkpoint.h">
+      <Filter>Source Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

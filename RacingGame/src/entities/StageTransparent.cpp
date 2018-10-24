@@ -30,9 +30,10 @@ StageTransparent::StageTransparent(const char* objFolder, const char* objFilenam
 	if (StageTransparent::models.size() == 0)
 	{
 		#ifdef DEV_MODE
-	std::fprintf(stdout, "Loading StageTransparent static models...\n");
-	#endif
-		loadObjModel(&StageTransparent::models, objFolder, objFilename);
+		std::fprintf(stdout, "Loading StageTransparent static models...\n");
+		#endif
+
+		loadModel(&StageTransparent::models, objFolder, objFilename);
 	}
 	
 	updateTransformationMatrix();

@@ -15,7 +15,7 @@ Ring;3300;100;Collect 100 Rings!
 Chao;1200;Find the lost chao!
 Hard;15000;Clear hard mode!
 
-SpeedHighway.lvl
+RainbowRoadDD.lvl
 Speed Highway
 3
 Normal;15000;Destroy the capsule and rescue the animals!
@@ -96,7 +96,7 @@ Sand Hill
 Normal;11000;Go fast
 Chao;900;Find the lost chao!
 
-RainbowRoad.lvl
+RainbowRoadDS.lvl
 Rainbow Road
 2
 Normal;10000;Go fast

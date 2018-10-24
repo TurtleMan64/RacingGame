@@ -17,8 +17,6 @@ public:
 
 	static void updateListenerData(Vector3f* eye, Vector3f* target, Vector3f* up, Vector3f* vel);
 
-	static ALuint loadWAV(const char* fileName);
-
 	static ALuint loadOGG(const char* fileName);
 	
 	static void cleanUp();

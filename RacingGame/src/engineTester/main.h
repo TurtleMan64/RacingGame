@@ -9,6 +9,7 @@ class SkySphere;
 class Light;
 class ShadowMapMasterRenderer;
 class Fbo;
+class Checkpoint;
 
 #include <string>
 #include <random>
@@ -128,6 +129,9 @@ public:
 	static int   checkpointTimeCen;
 	static int   checkpointTimeSec;
 	static int   checkpointTimeMin;
+
+	static std::list<Checkpoint*> gameCheckpointList;
+	static int gameCheckpointLast;
 
 	static std::vector<Level> gameLevelData;
 	static std::unordered_map<std::string, std::string> gameSaveData;

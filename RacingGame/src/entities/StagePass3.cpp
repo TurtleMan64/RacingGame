@@ -30,9 +30,10 @@ StagePass3::StagePass3(const char* objFolder, const char* objFilename)
 	if (StagePass3::models.size() == 0)
 	{
 		#ifdef DEV_MODE
-	std::fprintf(stdout, "Loading StagePass3 static models...\n");
-	#endif
-		loadObjModel(&StagePass3::models, objFolder, objFilename);
+		std::fprintf(stdout, "Loading StagePass3 static models...\n");
+		#endif
+
+		loadModel(&StagePass3::models, objFolder, objFilename);
 	}
 	
 	updateTransformationMatrix();

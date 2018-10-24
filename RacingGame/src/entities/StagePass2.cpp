@@ -33,7 +33,7 @@ StagePass2::StagePass2(const char* objFolder, const char* objFilename)
 		std::fprintf(stdout, "Loading StagePass2 static models...\n");
 		#endif
 
-		loadObjModel(&StagePass2::models, objFolder, objFilename);
+		loadModel(&StagePass2::models, objFolder, objFilename);
 	}
 	
 	updateTransformationMatrix();

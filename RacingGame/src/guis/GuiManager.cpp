@@ -211,28 +211,28 @@ void GuiManager::refresh()
 
 		textA->deleteMe(); delete textA; INCR_DEL textA = nullptr;
 		textA = new GUIText("A", 1, fontVip, 0.80f, 0.95f, 1, false, false, Global::debugDisplay); INCR_NEW
-		if (!Input::inputs.INPUT_JUMP)
+		if (!Input::inputs.INPUT_ACTION1)
 		{
 			textA->setColour(0.2f, 0.2f, 0.2f);
 		}
 
 		textB->deleteMe(); delete textB; INCR_DEL textB = nullptr;
 		textB = new GUIText("B", 1, fontVip, 0.85f, 0.95f, 1, false, false, Global::debugDisplay); INCR_NEW
-		if (!Input::inputs.INPUT_ACTION)
+		if (!Input::inputs.INPUT_ACTION2)
 		{
 			textB->setColour(0.2f, 0.2f, 0.2f);
 		}
 
 		textX->deleteMe(); delete textX; INCR_DEL textX = nullptr;
 		textX = new GUIText("X", 1, fontVip, 0.90f, 0.95f, 1, false, false, Global::debugDisplay); INCR_NEW
-		if (!Input::inputs.INPUT_ACTION2)
+		if (!Input::inputs.INPUT_ACTION3)
 		{
 			textX->setColour(0.2f, 0.2f, 0.2f);
 		}
 
 		textY->deleteMe(); delete textY; INCR_DEL textY = nullptr;
 		textY = new GUIText("Y", 1, fontVip, 0.95f, 0.95f, 1, false, false, Global::debugDisplay); INCR_NEW
-		if (!Input::inputs.INPUT_SPECIAL)
+		if (!Input::inputs.INPUT_ACTION4)
 		{
 			textY->setColour(0.2f, 0.2f, 0.2f);
 		}

@@ -48,10 +48,7 @@ void Stage::loadModels(char* folder, char* name)
 	std::string path = "res/Models/";
 	path = (path + folder) + "/";
 
-	std::string filename = name;
-	filename = filename + ".obj";
-
-	loadObjModel(&Stage::models, path.c_str(), filename.c_str());
+	loadModel(&Stage::models, path, name);
 }
 
 void Stage::deleteModels()

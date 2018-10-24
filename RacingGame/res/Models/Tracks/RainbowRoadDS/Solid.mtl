@@ -1,0 +1,100 @@
+	# Blender MTL File: 'None'
+	# Material Count: 8
+
+newmtl DASH
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	scrollY 1.0
+	illum 2
+	map_Kd DASH.png
+	map_Ka DASH.png
+
+newmtl dokan
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd dokan.png
+	map_Ka dokan.png
+
+newmtl heri
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd heri.png
+	map_Ka heri.png
+
+newmtl lambert212
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd lambert212.png
+	map_Ka lambert212.png
+
+newmtl logo
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd logo.png
+	map_Ka logo.png
+
+newmtl pasted__star_obj
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd pasted__star_obj.png
+	map_Ka pasted__star_obj.png
+
+newmtl rainbow0
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	illum 2
+	map_Kd rainbow0.png
+	map_Ka rainbow0.png
+
+newmtl rainbow0_d
+	Ns 20
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.640000 0.640000 0.640000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 0.02
+	d 0.000000
+	scrollX -1.0
+	illum 2
+	map_Kd rainbow0_d.png
+	map_Ka rainbow0_d.png

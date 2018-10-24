@@ -76,12 +76,13 @@ void Input::pollInputs()
 {
 	glfwPollEvents();
 
-	Input::inputs.INPUT_PREVIOUS_JUMP     = Input::inputs.INPUT_JUMP;
-	Input::inputs.INPUT_PREVIOUS_ACTION   = Input::inputs.INPUT_ACTION;
-	Input::inputs.INPUT_PREVIOUS_ACTION2  = Input::inputs.INPUT_ACTION2;
-	Input::inputs.INPUT_PREVIOUS_SHOULDER = Input::inputs.INPUT_SHOULDER;
-	Input::inputs.INPUT_PREVIOUS_SPECIAL  = Input::inputs.INPUT_SPECIAL;
-	Input::inputs.INPUT_PREVIOUS_START    = Input::inputs.INPUT_START;
+	Input::inputs.INPUT_PREVIOUS_ACTION1 = Input::inputs.INPUT_ACTION1;
+	Input::inputs.INPUT_PREVIOUS_ACTION2 = Input::inputs.INPUT_ACTION2;
+	Input::inputs.INPUT_PREVIOUS_ACTION3 = Input::inputs.INPUT_ACTION3;
+	Input::inputs.INPUT_PREVIOUS_ACTION4 = Input::inputs.INPUT_ACTION4;
+	Input::inputs.INPUT_PREVIOUS_LB      = Input::inputs.INPUT_LB;
+	Input::inputs.INPUT_PREVIOUS_RB      = Input::inputs.INPUT_RB;
+	Input::inputs.INPUT_PREVIOUS_START   = Input::inputs.INPUT_START;
 
 	Input::inputs.INPUT_PREVIOUS_X  = Input::inputs.INPUT_X;
 	Input::inputs.INPUT_PREVIOUS_Y  = Input::inputs.INPUT_Y;
@@ -91,16 +92,17 @@ void Input::pollInputs()
 	Input::inputs.INPUT_PREVIOUS_L2 = Input::inputs.INPUT_R2;
 
 
-	Input::inputs.INPUT_JUMP = false;
-	Input::inputs.INPUT_ACTION = false;
+	Input::inputs.INPUT_ACTION1 = false;
 	Input::inputs.INPUT_ACTION2 = false;
-	Input::inputs.INPUT_SHOULDER = false;
-	Input::inputs.INPUT_SELECT = false;
-	Input::inputs.INPUT_SPECIAL = false;
-	Input::inputs.INPUT_START = false;
+	Input::inputs.INPUT_ACTION3 = false;
+	Input::inputs.INPUT_ACTION4 = false;
+	Input::inputs.INPUT_LB      = false;
+	Input::inputs.INPUT_RB      = false;
+	Input::inputs.INPUT_SELECT  = false;
+	Input::inputs.INPUT_START   = false;
 
-	Input::inputs.INPUT_X = 0;
-	Input::inputs.INPUT_Y = 0;
+	Input::inputs.INPUT_X  = 0;
+	Input::inputs.INPUT_Y  = 0;
 	Input::inputs.INPUT_X2 = 0;
 	Input::inputs.INPUT_Y2 = 0;
 	Input::inputs.INPUT_L2 = 0;
@@ -149,11 +151,12 @@ void Input::pollInputs()
 		int buttonCount;
 		const unsigned char *buttons = glfwGetJoystickButtons(CONTROLLER_ID, &buttonCount);
 
-		Input::inputs.INPUT_JUMP     = buttons[BUTTON_A];
-		Input::inputs.INPUT_ACTION   = buttons[BUTTON_B];
-		Input::inputs.INPUT_ACTION2  = buttons[BUTTON_X];
-		Input::inputs.INPUT_SPECIAL  = buttons[BUTTON_Y];
-		Input::inputs.INPUT_SHOULDER = buttons[BUTTON_RB];
+		Input::inputs.INPUT_ACTION1  = buttons[BUTTON_A];
+		Input::inputs.INPUT_ACTION2  = buttons[BUTTON_B];
+		Input::inputs.INPUT_ACTION3  = buttons[BUTTON_X];
+		Input::inputs.INPUT_ACTION4  = buttons[BUTTON_Y];
+		Input::inputs.INPUT_RB       = buttons[BUTTON_RB];
+		Input::inputs.INPUT_LB       = buttons[BUTTON_LB];
 		Input::inputs.INPUT_START    = buttons[BUTTON_START];
 
 
@@ -172,19 +175,19 @@ void Input::pollInputs()
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		Input::inputs.INPUT_JUMP = true;
+		Input::inputs.INPUT_ACTION1 = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		Input::inputs.INPUT_ACTION = true;
+		Input::inputs.INPUT_ACTION2 = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		Input::inputs.INPUT_ACTION2 = true;
+		Input::inputs.INPUT_ACTION3 = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 	{
-		Input::inputs.INPUT_SPECIAL = true;
+		Input::inputs.INPUT_ACTION4 = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
@@ -192,7 +195,7 @@ void Input::pollInputs()
 	}
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 	{
-		Input::inputs.INPUT_SHOULDER = true;
+		Input::inputs.INPUT_LB = true;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -234,12 +237,13 @@ void Input::pollInputs()
 
 
 	#ifdef DEV_MODE
-	if (Input::inputs.INPUT_SHOULDER && !Input::inputs.INPUT_PREVIOUS_SHOULDER)
+	if (Input::inputs.INPUT_LB && !Input::inputs.INPUT_PREVIOUS_LB)
 	{
 		if (Global::gameMainVehicle != nullptr)
 		{
 			std::fprintf(stdout, "Time of day: %f\n", SkyManager::getTimeOfDay());
-			std::fprintf(stdout, "[%f, %f, %f]\n", Global::gameMainVehicle->getPosition()->x, Global::gameMainVehicle->getPosition()->y, Global::gameMainVehicle->getPosition()->z);
+			std::fprintf(stdout, "position = [%f, %f, %f]\n", Global::gameMainVehicle->getPosition()->x, Global::gameMainVehicle->getPosition()->y, Global::gameMainVehicle->getPosition()->z);
+			//std::fprintf(stdout, "normal   = [%f, %f, %f]\n", Global::gameMainVehicle->get);
 			//std::fprintf(stdout, "player rot = %f\n", Global::gamePlayer->getRotY());
 			//std::fprintf(stdout, "cam yaw: %f,   cam pitch: %f\n", Global::gameCamera->getYaw(), Global::gameCamera->getPitch());
 			std::fprintf(stdout, "\n");

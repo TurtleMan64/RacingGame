@@ -1,0 +1,17 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl space
+Ns 20
+Ka 0.000000 0.000000 0.000000
+Kd 0.627451 0.627451 0.627451
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 0
+Tr 0
+glow 1.0
+d 0.000000
+illum 2
+map_Kd space.png
+map_Ka space.png
+map_d space.png

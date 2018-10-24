@@ -1176,8 +1176,8 @@ void MainMenu::step()
 	bool shouldGoDown  = false;
 	bool shouldGoLeft  = false;
 	bool shouldGoRight = false;
-	bool pressedSelect = (Input::inputs.INPUT_JUMP && !Input::inputs.INPUT_PREVIOUS_JUMP) || (Input::inputs.INPUT_START && !Input::inputs.INPUT_PREVIOUS_START);
-	bool pressedBack   = (Input::inputs.INPUT_ACTION && !Input::inputs.INPUT_PREVIOUS_ACTION);
+	bool pressedSelect = (Input::inputs.INPUT_ACTION1 && !Input::inputs.INPUT_PREVIOUS_ACTION1) || (Input::inputs.INPUT_START && !Input::inputs.INPUT_PREVIOUS_START);
+	bool pressedBack   = (Input::inputs.INPUT_ACTION2 && !Input::inputs.INPUT_PREVIOUS_ACTION2);
 
 	int moveX = (int)round(Input::inputs.INPUT_X);
 	int moveY = (int)round(Input::inputs.INPUT_Y);

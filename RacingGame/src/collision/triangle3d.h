@@ -27,7 +27,7 @@ public:
 	float C;
 	float D;
 
-	char type; //0 = normal, 1 = heal, 2 = slip, 3 = brake
+	char type; //0 = normal, 1 = heal, 2 = slip, 3 = brake, 4 = mini boost, 5 = wall
 
 	char sound;
 
@@ -49,6 +49,10 @@ public:
 	bool isSlippery();
 
 	bool isBrake();
+
+	bool isMiniBoost();
+
+	bool isWall();
 };
 
 #endif

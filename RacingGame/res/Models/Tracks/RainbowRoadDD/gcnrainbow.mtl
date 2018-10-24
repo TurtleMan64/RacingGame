@@ -1,0 +1,265 @@
+# Wavefront MTL
+# Created by fragMOTION
+# http://www.fragmosoft.com
+
+newmtl m0
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS21.png
+newmtl m1
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrMS19.png
+newmtl m10
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS10.png
+newmtl m11
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS09.png
+newmtl m12
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS08.png
+newmtl m13
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS07.png
+newmtl m14
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS04.png
+newmtl m15
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS03.png
+newmtl m16
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS01.png
+newmtl m17
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS00.png
+newmtl m2
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS18.png
+newmtl m3
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS11.png
+newmtl m4
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS16.png
+newmtl m5
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS15.png
+newmtl m6
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS14.png
+newmtl m7
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS13.png
+newmtl m8
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS12.png
+newmtl m9
+illum 2
+d 1
+ka 0.584314 0.584314 0.584314
+kd 0.584314 0.584314 0.584314
+ks 0.894118 0.894118 0.894118
+ke 0 0 0
+ns 12.8
+map_Kd gcnrSS11.png
+newmtl Texture1
+illum 2
+d 1
+ka 0.74902 0.74902 0.74902
+kd 0.74902 0.74902 0.74902
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrMS19.png
+newmtl Texture13
+illum 2
+d 1
+ka 0.74902 0.74902 0.74902
+kd 0.74902 0.74902 0.74902
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS15.png
+newmtl Texture9
+illum 2
+d 1
+ka 0.74902 0.74902 0.74902
+kd 0.74902 0.74902 0.74902
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS00.png
+newmtl Texture
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS15.png
+newmtl Texture2
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrMS19.png
+newmtl Texture3
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS09.png
+newmtl Texture8
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS01.png
+newmtl Texture4
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS21.png
+newmtl Texture5
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS09.png
+newmtl Texture6
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS00.png
+newmtl Texture7
+illum 2
+d 1
+ka 0.752941 0.752941 0.752941
+kd 0.752941 0.752941 0.752941
+ks 0 0 0
+ke 0 0 0
+ns 40
+map_Kd gcnrSS01.png

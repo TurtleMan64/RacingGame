@@ -75,3 +75,13 @@ bool Triangle3D::isBrake()
 {
 	return (type == 3);
 }
+
+bool Triangle3D::isMiniBoost()
+{
+	return (type == 4);
+}
+
+bool Triangle3D::isWall()
+{
+	return (type == 5);
+}

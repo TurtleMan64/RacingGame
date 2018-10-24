@@ -1,6 +1,6 @@
-TwistRoad
+Tracks/TwistRoad
 Track
-TwistRoad
+Tracks/TwistRoad
 1
 Track 7
 1.0 1.0 1.0
@@ -21,5 +21,5 @@ Track 7
 # Car
 6 0 10 210
 
-# Transparent
-72 res/Models/TwistRoad/ Transparent.obj pass2
+# Pass 2
+2 res/Models/Tracks/TwistRoad/ Transparent

@@ -64,6 +64,7 @@
 #include "../entities/skysphere.h"
 #include "../fontMeshCreator/guinumber.h"
 #include "../entities/car.h"
+#include "../entities/checkpoint.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -163,6 +164,9 @@ bool Global::gameIsArcadeMode = false;
 std::vector<Level> Global::gameLevelData;
 std::unordered_map<std::string, std::string> Global::gameSaveData;
 bool Global::stageUsesWater = true;
+
+std::list<Checkpoint*> Global::gameCheckpointList;
+int Global::gameCheckpointLast;
 
 bool   Global::spawnAtCheckpoint  = false;
 float  Global::checkpointX        = 0;
@@ -842,7 +846,7 @@ void Main_deleteAllTransparentEntites()
 
 void increaseProcessPriority()
 {
-#ifdef _WIN32
+	#ifdef _WIN32
 	//DWORD dwError;//, dwPriClass;
 
 	/*
@@ -859,7 +863,21 @@ void increaseProcessPriority()
 	}
 	*/
 
-#endif
+	/*
+	if (!SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS))
+	{
+		dwError = GetLastError();
+		_tprintf(TEXT("Failed to enter above normal mode (%d)\n"), (int)dwError);
+	}
+
+	if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL))
+	{
+		dwError = GetLastError();
+		_tprintf(TEXT("Failed to enter above normal mode (%d)\n"), (int)dwError);
+	}
+	*/
+
+	#endif
 }
 
 void Global::checkErrorAL(const char* description)
