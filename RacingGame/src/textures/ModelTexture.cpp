@@ -6,14 +6,18 @@
 
 ModelTexture::ModelTexture()
 {
-
+	this->shineDamper = 20;
+	this->reflectivity = 0.02f;
+	this->hasTransparency = 0;
+	this->useFakeLighting = 0;
+	this->glowAmount = 0;
 }
 
 ModelTexture::ModelTexture(GLuint texID)
 {
 	this->texID = texID;
-	this->shineDamper = 1;
-	this->reflectivity = 0;
+	this->shineDamper = 20;
+	this->reflectivity = 0.02f;
 	this->hasTransparency = 0;
 	this->useFakeLighting = 0;
 	this->glowAmount = 0;
@@ -26,7 +30,7 @@ GLuint ModelTexture::getID()
 
 void ModelTexture::setID(GLuint newID)
 {
-	this->texID = newID;
+	texID = newID;
 }
 
 float ModelTexture::getShineDamper()
@@ -35,7 +39,7 @@ float ModelTexture::getShineDamper()
 }
 void ModelTexture::setShineDamper(float newShineDamper)
 {
-	this->shineDamper = newShineDamper;
+	shineDamper = newShineDamper;
 }
 
 float ModelTexture::getReflectivity()
@@ -44,7 +48,7 @@ float ModelTexture::getReflectivity()
 }
 void ModelTexture::setReflectivity(float newReflectivity)
 {
-	this->reflectivity = newReflectivity;
+	reflectivity = newReflectivity;
 }
 
 int ModelTexture::getHasTransparency()
@@ -53,7 +57,7 @@ int ModelTexture::getHasTransparency()
 }
 void ModelTexture::setHasTransparency(int newHasTransparency)
 {
-	this->hasTransparency = newHasTransparency;
+	hasTransparency = newHasTransparency;
 }
 
 int ModelTexture::getUsesFakeLighting()
@@ -62,7 +66,7 @@ int ModelTexture::getUsesFakeLighting()
 }
 void ModelTexture::setUsesFakeLighting(int newUseFakeLighting)
 {
-	this->useFakeLighting = newUseFakeLighting;
+	useFakeLighting = newUseFakeLighting;
 }
 
 float ModelTexture::getGlowAmount()
@@ -72,7 +76,7 @@ float ModelTexture::getGlowAmount()
 
 void ModelTexture::setGlowAmount(float newGlowAmount)
 {
-	this->glowAmount = newGlowAmount;
+	glowAmount = newGlowAmount;
 }
 
 void ModelTexture::setScrollX(float speedX)
@@ -97,5 +101,5 @@ float ModelTexture::getScrollY()
 
 void ModelTexture::deleteMe()
 {
-	Loader_deleteTexture(texID);
+	Loader::deleteTexture(texID);
 }

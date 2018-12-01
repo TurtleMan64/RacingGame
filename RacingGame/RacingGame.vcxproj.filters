@@ -336,6 +336,9 @@
     <ClCompile Include="src\entities\Checkpoint.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\entities\JumpRamp.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio\audiomaster.h">
@@ -582,6 +585,9 @@
       <Filter>Source Files\entities\RainbowRoad</Filter>
     </ClInclude>
     <ClInclude Include="src\entities\checkpoint.h">
+      <Filter>Source Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\jumpramp.h">
       <Filter>Source Files\entities</Filter>
     </ClInclude>
   </ItemGroup>

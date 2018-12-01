@@ -1,0 +1,47 @@
+Tracks/Casino
+Single
+Tracks/Casino
+1
+Collision 8
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.000000000000006 2.0
+90
+540 9
+1
+4
+res/Audio/BGM/casino_intro.ogg
+res/Audio/BGM/casino_loop.ogg
+res/Audio/BGM/casino_b_intro.ogg
+res/Audio/BGM/casino_b_loop.ogg
+0 0 0
+0 0
+-200
+
+6 0 0.001 0
+
+# Pass 2
+2 res/Models/Tracks/Casino/ Pass2
+
+# Pass 3
+3 res/Models/Tracks/Casino/ Pass3
+
+# Transparent
+#4 res/Models/Tracks/Casino/ Transparent
+
+10 0 0 0 -50 60 30 50 0
+10 0 3.377031 13.66355 -1184.71 650.125 156.25 1087.75 1
+10 0 1236.515 249.663 -218.674 589.375 449.875 1360 2
+10 0 293.2842 269.9066 1841.492 813.25 314.875 758.125 3
+10 0 6.77038 79.30267 793.2701 124.75 173.125 561.25 4
+10 0 0 0 130 60 30 130 5
+
+11 960 -55.17 -666.6 -90
+11 1066.5 -64.23 284.8 180
+11 865.75 -32.58 803.38 -90
+11 769.66 -1.925 1873.5 -90
+11 332.58 0 2139.7 180

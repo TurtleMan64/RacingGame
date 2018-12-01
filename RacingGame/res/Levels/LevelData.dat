@@ -1,36 +1,7 @@
-23
-
-CylinderKnot.lvl
-Emerald Coast
-3
-Normal;14500;Destroy the capsule and rescue the animals!
-Ring;3000;200;Collect 200 Rings!
-Chao;4200;Find the lost chao!
-
-TwistRoad.lvl
-Dry Lagoon
-4
-Normal;13000;Find the pieces of the Master Emerald!
-Ring;3300;100;Collect 100 Rings!
-Chao;1200;Find the lost chao!
-Hard;15000;Clear hard mode!
-
-RainbowRoadDD.lvl
-Speed Highway
-3
-Normal;15000;Destroy the capsule and rescue the animals!
-Ring;3600;150;Collect 150 Rings!
-Chao;3600;Find the lost chao!
-
-GP.lvl
-Twinkle Park
-3
-Normal;14000;Destroy the capsule and rescue the animals!
-Ring;5400;400;Collect 400 Rings!
-Chao;4200;Find the lost chao!
+6
 
 DragonRoad.lvl
-Wild Canyon
+Dragon Road
 4
 Normal;13000;Find the pieces of the Master Emerald!
 Ring;3600;100;Collect 100 Rings!
@@ -38,116 +9,34 @@ Chao;3600;Find the lost chao!
 Hard;1600;Clear hard mode!
 
 ThunderRoad.lvl
-Metal Harbor
+Thunder Road
 3
 Normal;14000;Escape from the military base!
 Ring;4800;150;Collect 150 Rings!
 Chao;2700;Find the lost chao!
 
 Ordeal.lvl
-Delfino Plaza
+Big Blue
 3
 Normal;13000;Find the pieces of the Master Emerald!
 Chao;1800;Find the lost chao!
 Hard;14000;Clear hard mode!
 
-Oval.lvl
-Green Hill Zone
-3
-Normal;14000;Pursue Eggman
-Ring;3600;150;Collect 150 Rings!
-Chao;2400;Find the lost chao!
-
-NokiBay.lvl
-Noki Bay
+WarioColosseum.lvl
+Wario Colosseum
 3
 Normal;13000;Find the pieces of the Master Emerald!
 Chao;9600;Find the lost chao!
 Hard;13000;Clear hard mode!
 
-WeaponsBed.lvl
-Weapons Bed
-3
-Normal;12000;Escape from the military base!
-Ring;5400;150;Collect 150 Rings!
-Chao;1800;Find the lost chao!
-
-OutsetIsland.lvl
-Outset Island
-2
-Hard;16000;Find the pieces of the Master Emerald!
-Chao;900;Find the lost chao!
-
-WuhuIsland.lvl
-Wuhu Island
+Casino.lvl
+Casino Palace
 2
 Normal;10000;Do a lap around the island
 Chao;1800;Find the lost chao!
-
-Snowhead.lvl
-Snowhead
-2
-Normal;9000;Help the old goron dude find his son or something
-Chao;2400;Find the lost chao!
-
-SandHill.lvl
-Sand Hill
-2
-Normal;11000;Go fast
-Chao;900;Find the lost chao!
 
 RainbowRoadDS.lvl
 Rainbow Road
 2
 Normal;10000;Go fast
 Chao;900;Find the lost chao!
-
-PeachCastle.lvl
-Peach's Castle
-2
-Normal;10600;Reach the tip top of the castle
-Chao;1800;Find the lost chao!
-
-KoopaTroopaBeach.lvl
-Koopa Beach
-2
-Normal;10000;Do a lap around the island
-Chao;600;Find the lost chao!
-
-FireField.lvl
-Fire Field
-2
-Normal;9800;Do 3 laps around the track
-Chao;1500;Find the lost chao!
-
-BobOmbBattlefield.lvl
-Bob-omb Battlefield
-2
-Hard;22000;Find the pieces of the Master Emerald!
-Chao;600;Find the lost chao!
-
-KingdomValley.lvl
-Kingdom Valley
-2
-Normal;10000;Go fast
-Chao;1800;Find the lost chao!
-
-PumpkinHill.lvl
-Pumpkin Hill
-4
-Normal;13000;Find the pieces of the Master Emerald!
-Ring;3600;100;Collect 100 Rings!
-Chao;2700;Find the lost chao!
-Hard;15000;Clear hard mode!
-
-RadicalHighway.lvl
-Radical Highway
-3
-Normal;12500;Break through the besieging military!
-Ring;5400;150;Collect 150 Rings!
-Chao;5400;Find the lost chao!
-
-Boss.lvl
-Boss
-1
-Normal;0;Defeat Metal Sonic!

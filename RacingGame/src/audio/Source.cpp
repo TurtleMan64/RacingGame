@@ -97,3 +97,33 @@ ALuint Source::getLastPlayedBufferID()
 {
 	return bufferID;
 }
+
+float Source::getSoundCompletion()
+{
+	if (!isPlaying())
+	{
+		return 0;
+	}
+
+	ALint sizeInBytes;
+	//ALint channels;
+	//ALint bits;
+
+	alGetBufferi(bufferID, AL_SIZE, &sizeInBytes);
+
+	if (sizeInBytes == 0)
+	{
+		return 0;
+	}
+
+	//alGetBufferi(bufferID, AL_CHANNELS, &channels);
+	//alGetBufferi(bufferID, AL_BITS, &bits);
+
+	//float lengthInSamples = sizeInBytes * 8 / (channels * bits);
+
+	float pos;
+	alGetSourcef(sourceID, AL_BYTE_OFFSET, &pos);
+	float normalizedPos = pos/sizeInBytes;
+
+	return normalizedPos;
+}

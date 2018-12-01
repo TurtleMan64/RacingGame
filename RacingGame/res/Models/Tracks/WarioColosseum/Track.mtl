@@ -1,0 +1,103 @@
+# Material Count: 11
+
+newmtl m2
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS12.png
+scrollX 0
+scrollY 0
+map_Kd wariSS12.png
+
+newmtl m3
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS11.png
+scrollX 0
+scrollY 0
+map_Kd wariSS11.png
+
+newmtl m10
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS05.png
+scrollX 0
+scrollY 0
+map_Kd wariSS05.png
+
+newmtl m14
+Ns 19.607843
+Ni 0.02
+Tr 1
+glow 1.0
+map_d wariSS01.png
+scrollX 0
+scrollY 0
+map_Kd wariSS01.png
+
+newmtl m1
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS13.png
+scrollX 0
+scrollY 0
+map_Kd wariSS13.png
+
+newmtl m0
+Ns 19.607843
+Ni 0.02
+Tr 1
+glow 1.0
+map_d wariSS14.png
+scrollX 0
+scrollY -2
+map_Kd wariSS14.png
+
+newmtl m13
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS02.png
+scrollX 0
+scrollY 0
+map_Kd wariSS02.png
+
+newmtl m7
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS08.png
+scrollX 0
+scrollY 0
+map_Kd wariSS08.png
+
+newmtl m5
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS10.png
+scrollX 0
+scrollY 0
+map_Kd wariSS10.png
+
+newmtl m8
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS07.png
+scrollX 0
+scrollY 0
+map_Kd wariSS07.png
+
+newmtl m6
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS09.png
+scrollX 0
+scrollY 0
+map_Kd wariSS09.png
+

@@ -48,15 +48,15 @@ bool CollisionChecker::checkCollision(
 {
 	bool triangleCollide = false;
 	CollisionModel* finalModel = nullptr;
-	double firstAbove = -2;
-	double secondAbove = -2;
-	double tx1 = 0, tx2 = 0, tx3 = 0, ty1 = 0, ty2 = 0, ty3 = 0, tz1 = 0, tz2 = 0, tz3 = 0;
-	double A, B, C, D;
-	double numerator, denominator, u;
+	float firstAbove = -2;
+	float secondAbove = -2;
+	float tx1 = 0, tx2 = 0, tx3 = 0, ty1 = 0, ty2 = 0, ty3 = 0, tz1 = 0, tz2 = 0, tz3 = 0;
+	float A, B, C, D;
+	float numerator, denominator, u;
 
-	double minDist = -1;
+	float minDist = -1;
 
-	double checkRadius = 8 + sqrt(pow(px2 - px1, 2) + pow(py2 - py1, 2) + pow(pz2 - pz1, 2));
+	float checkRadius = 8 + sqrtf(powf(px2 - px1, 2) + powf(py2 - py1, 2) + powf(pz2 - pz1, 2));
 
 
 	//CollisionChecker::collideModels.push_back(CollisionChecker::stageCollideModel);
@@ -115,47 +115,47 @@ bool CollisionChecker::checkCollision(
 								if (denominator != 0)
 								{
 									u = (numerator / denominator);
-									double cix = px1 + u*(px2 - px1);
-									double ciy = py1 + u*(py2 - py1);
-									double ciz = pz1 + u*(pz2 - pz1);
+									float cix = px1 + u*(px2 - px1);
+									float ciy = py1 + u*(py2 - py1);
+									float ciz = pz1 + u*(pz2 - pz1);
 
 									if (B != 0)
 									{
-										double planey1 = (((-A*px1) + (-C*pz1) - D) / B);
-										double planey2 = (((-A*px2) + (-C*pz2) - D) / B);
-										firstAbove = copysign(1, py1 - planey1);
-										secondAbove = copysign(1, py2 - planey2);
+										float planey1 = (((-A*px1) + (-C*pz1) - D) / B);
+										float planey2 = (((-A*px2) + (-C*pz2) - D) / B);
+										firstAbove = copysignf(1, py1 - planey1);
+										secondAbove = copysignf(1, py2 - planey2);
 									}
 									else if (A != 0)
 									{
-										double planex1 = (((-B*py1) + (-C*pz1) - D) / A);
-										double planex2 = (((-B*py2) + (-C*pz2) - D) / A);
-										firstAbove = copysign(1, px1 - planex1);
-										secondAbove = copysign(1, px2 - planex2);
+										float planex1 = (((-B*py1) + (-C*pz1) - D) / A);
+										float planex2 = (((-B*py2) + (-C*pz2) - D) / A);
+										firstAbove = copysignf(1, px1 - planex1);
+										secondAbove = copysignf(1, px2 - planex2);
 									}
 									else if (C != 0)
 									{
-										double planez1 = (((-B*py1) + (-A*px1) - D) / C);
-										double planez2 = (((-B*py2) + (-A*px2) - D) / C);
-										firstAbove = copysign(1, pz1 - planez1);
-										secondAbove = copysign(1, pz2 - planez2);
+										float planez1 = (((-B*py1) + (-A*px1) - D) / C);
+										float planez2 = (((-B*py2) + (-A*px2) - D) / C);
+										firstAbove = copysignf(1, pz1 - planez1);
+										secondAbove = copysignf(1, pz2 - planez2);
 									}
 
 									if (secondAbove != firstAbove &&
 										checkPointInTriangle3D(cix, ciy, ciz, tx1, ty1, tz1, tx2, ty2, tz2, tx3, ty3, tz3,
-											abs(currTriangle->normal.x),
-											abs(currTriangle->normal.y),
-											abs(currTriangle->normal.z)))
+											fabsf(currTriangle->normal.x),
+											fabsf(currTriangle->normal.y),
+											fabsf(currTriangle->normal.z)))
 									{
 										//what is the distance to the triangle? set it to maxdist
 										triangleCollide = true;
-										double thisDist = (sqrt(abs((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
+										float thisDist = (sqrtf(fabsf((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
 										if (minDist == -1 || thisDist < minDist)
 										{
 											collideTriangle = currTriangle;
-											collidePosition.x = (float)cix;
-											collidePosition.y = (float)ciy;
-											collidePosition.z = (float)ciz;
+											collidePosition.x = cix;
+											collidePosition.y = ciy;
+											collidePosition.z = ciz;
 											minDist = thisDist;
 											finalModel = cm;
 										}
@@ -234,47 +234,47 @@ bool CollisionChecker::checkCollision(
 								if (denominator != 0)
 								{
 									u = (numerator / denominator);
-									double cix = px1 + u*(px2 - px1);
-									double ciy = py1 + u*(py2 - py1);
-									double ciz = pz1 + u*(pz2 - pz1);
+									float cix = px1 + u*(px2 - px1);
+									float ciy = py1 + u*(py2 - py1);
+									float ciz = pz1 + u*(pz2 - pz1);
 
 									if (B != 0)
 									{
-										double planey1 = (((-A*px1) + (-C*pz1) - D) / B);
-										double planey2 = (((-A*px2) + (-C*pz2) - D) / B);
-										firstAbove = copysign(1, py1 - planey1);
-										secondAbove = copysign(1, py2 - planey2);
+										float planey1 = (((-A*px1) + (-C*pz1) - D) / B);
+										float planey2 = (((-A*px2) + (-C*pz2) - D) / B);
+										firstAbove = copysignf(1, py1 - planey1);
+										secondAbove = copysignf(1, py2 - planey2);
 									}
 									else if (A != 0)
 									{
-										double planex1 = (((-B*py1) + (-C*pz1) - D) / A);
-										double planex2 = (((-B*py2) + (-C*pz2) - D) / A);
-										firstAbove = copysign(1, px1 - planex1);
-										secondAbove = copysign(1, px2 - planex2);
+										float planex1 = (((-B*py1) + (-C*pz1) - D) / A);
+										float planex2 = (((-B*py2) + (-C*pz2) - D) / A);
+										firstAbove = copysignf(1, px1 - planex1);
+										secondAbove = copysignf(1, px2 - planex2);
 									}
 									else if (C != 0)
 									{
-										double planez1 = (((-B*py1) + (-A*px1) - D) / C);
-										double planez2 = (((-B*py2) + (-A*px2) - D) / C);
-										firstAbove = copysign(1, pz1 - planez1);
-										secondAbove = copysign(1, pz2 - planez2);
+										float planez1 = (((-B*py1) + (-A*px1) - D) / C);
+										float planez2 = (((-B*py2) + (-A*px2) - D) / C);
+										firstAbove = copysignf(1, pz1 - planez1);
+										secondAbove = copysignf(1, pz2 - planez2);
 									}
 
 									if (secondAbove != firstAbove &&
 										checkPointInTriangle3D(cix, ciy, ciz, tx1, ty1, tz1, tx2, ty2, tz2, tx3, ty3, tz3,
-											abs(currTriangle->normal.x),
-											abs(currTriangle->normal.y),
-											abs(currTriangle->normal.z)))
+											fabsf(currTriangle->normal.x),
+											fabsf(currTriangle->normal.y),
+											fabsf(currTriangle->normal.z)))
 									{
 										//what is the distance to the triangle? set it to maxdist
 										triangleCollide = true;
-										double thisDist = (sqrt(abs((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
+										float thisDist = (sqrtf(fabsf((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
 										if (minDist == -1 || thisDist < minDist)
 										{
 											collideTriangle = currTriangle;
-											collidePosition.x = (float)cix;
-											collidePosition.y = (float)ciy;
-											collidePosition.z = (float)ciz;
+											collidePosition.x = cix;
+											collidePosition.y = ciy;
+											collidePosition.z = ciz;
 											minDist = thisDist;
 											finalModel = cm;
 										}
@@ -345,47 +345,47 @@ bool CollisionChecker::checkCollision(
 						if (denominator != 0)
 						{
 							u = (numerator / denominator);
-							double cix = px1 + u*(px2 - px1);
-							double ciy = py1 + u*(py2 - py1);
-							double ciz = pz1 + u*(pz2 - pz1);
+							float cix = px1 + u*(px2 - px1);
+							float ciy = py1 + u*(py2 - py1);
+							float ciz = pz1 + u*(pz2 - pz1);
 
 							if (B != 0)
 							{
-								double planey1 = (((-A*px1) + (-C*pz1) - D) / B);
-								double planey2 = (((-A*px2) + (-C*pz2) - D) / B);
-								firstAbove = copysign(1, py1 - planey1);
-								secondAbove = copysign(1, py2 - planey2);
+								float planey1 = (((-A*px1) + (-C*pz1) - D) / B);
+								float planey2 = (((-A*px2) + (-C*pz2) - D) / B);
+								firstAbove = copysignf(1, py1 - planey1);
+								secondAbove = copysignf(1, py2 - planey2);
 							}
 							else if (A != 0)
 							{
-								double planex1 = (((-B*py1) + (-C*pz1) - D) / A);
-								double planex2 = (((-B*py2) + (-C*pz2) - D) / A);
-								firstAbove = copysign(1, px1 - planex1);
-								secondAbove = copysign(1, px2 - planex2);
+								float planex1 = (((-B*py1) + (-C*pz1) - D) / A);
+								float planex2 = (((-B*py2) + (-C*pz2) - D) / A);
+								firstAbove = copysignf(1, px1 - planex1);
+								secondAbove = copysignf(1, px2 - planex2);
 							}
 							else if (C != 0)
 							{
-								double planez1 = (((-B*py1) + (-A*px1) - D) / C);
-								double planez2 = (((-B*py2) + (-A*px2) - D) / C);
-								firstAbove = copysign(1, pz1 - planez1);
-								secondAbove = copysign(1, pz2 - planez2);
+								float planez1 = (((-B*py1) + (-A*px1) - D) / C);
+								float planez2 = (((-B*py2) + (-A*px2) - D) / C);
+								firstAbove = copysignf(1, pz1 - planez1);
+								secondAbove = copysignf(1, pz2 - planez2);
 							}
 
 							if (secondAbove != firstAbove &&
 								checkPointInTriangle3D(cix, ciy, ciz, tx1, ty1, tz1, tx2, ty2, tz2, tx3, ty3, tz3,
-									abs(currTriangle->normal.x),
-									abs(currTriangle->normal.y),
-									abs(currTriangle->normal.z)))
+									fabsf(currTriangle->normal.x),
+									fabsf(currTriangle->normal.y),
+									fabsf(currTriangle->normal.z)))
 							{
 								//what is the distance to the triangle? set it to maxdist
 								triangleCollide = true;
-								double thisDist = (sqrt(abs((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
+								float thisDist = (sqrtf(fabsf((cix - px1)*(cix - px1) + (ciy - py1)*(ciy - py1) + (ciz - pz1)*(ciz - pz1))));
 								if (minDist == -1 || thisDist < minDist)
 								{
 									collideTriangle = currTriangle;
-									collidePosition.x = (float)cix;
-									collidePosition.y = (float)ciy;
-									collidePosition.z = (float)ciz;
+									collidePosition.x = cix;
+									collidePosition.y = ciy;
+									collidePosition.z = ciz;
 									minDist = thisDist;
 									finalModel = cm;
 								}
@@ -408,11 +408,11 @@ bool CollisionChecker::checkCollision(
 }
 
 bool CollisionChecker::checkPointInTriangle3D(
-	double checkx, double checky, double checkz,
-	double cx1, double cy1, double cz1,
-	double cx2, double cy2, double cz2,
-	double cx3, double cy3, double cz3,
-	double nX, double nY, double nZ)
+	float checkx, float checky, float checkz,
+	float cx1,    float cy1,    float cz1,
+	float cx2,    float cy2,    float cz2,
+	float cx3,    float cy3,    float cz3,
+	float nX,     float nY,     float nZ)
 {
 	if (nY > nX && nY > nZ)
 	{
@@ -430,15 +430,15 @@ bool CollisionChecker::checkPointInTriangle3D(
 }
 
 bool CollisionChecker::checkPointInTriangle2D(
-	double x, double y,
-	double x1, double y1,
-	double x2, double y2,
-	double x3, double y3)
+	float x,  float y,
+	float x1, float y1,
+	float x2, float y2,
+	float x3, float y3)
 {
-	double denominator = ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3));
-	double a = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3)) / denominator;
-	double b = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3)) / denominator;
-	double c = 1 - a - b;
+	float denominator = ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3));
+	float a = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3)) / denominator;
+	float b = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3)) / denominator;
+	float c = 1 - a - b;
 
 	return (0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1);
 }
@@ -451,8 +451,7 @@ void CollisionChecker::deleteAllCollideModels()
 		CollisionModel* cm = CollisionChecker::collideModels.front();
 		CollisionChecker::collideModels.remove(cm);
 		cm->deleteMe();
-		delete cm;
-		INCR_DEL
+		delete cm; INCR_DEL
 	}
 }
 
@@ -472,34 +471,15 @@ void CollisionChecker::deleteAllCollideModelsExceptQuadTrees()
 	{
 		CollisionChecker::collideModels.remove(cm);
 		cm->deleteMe();
-		delete cm;
-		INCR_DEL
+		delete cm; INCR_DEL
 	}
 }
-
-/*
-void CollisionChecker::deleteStageCollideModel()
-{
-	if (CollisionChecker::stageCollideModel != nullptr)
-	{
-		CollisionChecker::stageCollideModel->deleteAllTriangles();
-		delete CollisionChecker::stageCollideModel;
-		CollisionChecker::stageCollideModel = nullptr;
-		INCR_DEL
-	}
-	else
-	{
-		std::fprintf(stdout, "tried to delete null stage collision model\n");
-	}
-}
-*/
 
 void CollisionChecker::deleteCollideModel(CollisionModel* cm)
 {
 	CollisionChecker::collideModels.remove(cm);
 	cm->deleteMe();
-	delete cm;
-	INCR_DEL
+	delete cm; INCR_DEL
 }
 
 //The model added must be created with the new keyword, as it will be deleted
@@ -509,12 +489,10 @@ void CollisionChecker::addCollideModel(CollisionModel* cm)
 	CollisionChecker::collideModels.push_back(cm);
 }
 
-
 Triangle3D* CollisionChecker::getCollideTriangle()
 {
 	return CollisionChecker::collideTriangle;
 }
-
 
 Vector3f* CollisionChecker::getCollidePosition()
 {

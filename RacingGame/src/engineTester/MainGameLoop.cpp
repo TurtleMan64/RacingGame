@@ -308,42 +308,15 @@ int main()
 		GLenum err = glGetError();
 		if (err != GL_NO_ERROR)
 		{
-			std::fprintf(stdout, "########  GL ERROR  ########\n");
-			std::fprintf(stdout, "%d\n", err);
+			std::fprintf(stderr, "########  GL ERROR  ########\n");
+			std::fprintf(stderr, "%d\n", err);
 		}
 
 		ALenum erral = alGetError();
 		if (erral != AL_NO_ERROR)
 		{
-			std::fprintf(stdout, "########  AL ERROR  ########\n");
-			std::fprintf(stdout, "%d\n", erral);
-		}
-
-		if (Global::raceStartTimer >= 0)
-		{
-			Global::raceStartTimer -= dt;
-			if (Global::raceStartTimer < 0)
-			{
-				//if (bgmHasLoop != 0)
-				{
-					//By default, first 2 buffers are the intro and loop, respectively
-					AudioPlayer::playBGMWithIntro(0, 1);
-				}
-				//else
-				{
-					//AudioPlayer::playBGM(0);
-				}
-				GuiManager::startTimer();
-				Global::gameMainVehicle->setCanMoveTimer(0);
-				Global::gameMainVehicle->setPosition(22.3715019f, 0.01f, 20.5539f);
-				Global::gameMainVehicle->setVelocity(0, 0, -0.001f);
-			}
-			else
-			{
-				Global::gameMainVehicle->setPosition(22.3715019f, 0.01f, 20.5539f);
-				Global::gameMainVehicle->setVelocity(0, 0, -0.001f);
-				Global::gameMainVehicle->setCanMoveTimer(1.0f);
-			}
+			std::fprintf(stderr, "########  AL ERROR  ########\n");
+			std::fprintf(stderr, "%d\n", erral);
 		}
 
 		//long double thisTime = std::time(0);
@@ -418,6 +391,34 @@ int main()
 			{
 				//game logic
 				GuiManager::increaseTimer(dt);
+
+				if (Global::raceStartTimer >= 0)
+				{
+					Global::raceStartTimer -= dt;
+					if (Global::raceStartTimer < 0)
+					{
+						//if (bgmHasLoop != 0)
+						{
+							//By default, first 2 buffers are the intro and loop, respectively
+							AudioPlayer::playBGMWithIntro(0, 1);
+						}
+						//else
+						{
+							//AudioPlayer::playBGM(0);
+						}
+						GuiManager::startTimer();
+						Global::gameMainVehicle->setCanMoveTimer(0);
+						Global::gameMainVehicle->setPosition(22.3715019f, 0.01f, 20.5539f);
+						Global::gameMainVehicle->setVelocity(0, 0, -0.001f);
+					}
+					else
+					{
+						Global::gameMainVehicle->setPosition(22.3715019f, 0.01f, 20.5539f);
+						Global::gameMainVehicle->setVelocity(0, 0, -0.001f);
+						Global::gameMainVehicle->setCanMoveTimer(1.0f);
+					}
+				}
+
 				for (auto e : gameEntities)
 				{
 					e.first->step();
@@ -522,6 +523,10 @@ int main()
 		for (auto e : gameTransparentEntities)
 		{
 			Master_processTransparentEntity(e.first);
+		}
+		for (Checkpoint* check : Global::gameCheckpointList)
+		{
+			Master_processEntity(check);
 		}
 		
 		Master_processEntity(&stage);
@@ -687,7 +692,7 @@ int main()
 		{
 			//std::fprintf(stdout, "fps: %f\n", frameCount / (seconds - previousTime));
 			//std::fprintf(stdout, "diff: %d\n", Global::countNew - Global::countDelete);
-			//Loader_printInfo();
+			//Loader::printInfo();
 			//std::fprintf(stdout, "entity counts: %d %d %d\n", gameEntities.size(), gameEntitiesPass2.size(), gameTransparentEntities.size());
 			//frameCount = 0;
 			//previousTime = seconds;
@@ -704,7 +709,7 @@ int main()
 	#endif
 
 	Master_cleanUp();
-	Loader_cleanUp();
+	Loader::cleanUp();
 	TextMaster::cleanUp();
 	AudioMaster::cleanUp();
 	GuiRenderer::cleanUp();

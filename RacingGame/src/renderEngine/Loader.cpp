@@ -13,20 +13,15 @@
 
 #include "../models/models.h"
 
-std::list<GLuint> vaos;
-std::list<GLuint> vbos;
-std::list<GLuint> textures;
+std::list<GLuint> Loader::vaos;
+std::list<GLuint> Loader::vbos;
+std::list<GLuint> Loader::textures;
 
-int vaoNumber = 0;
-int vboNumber = 0;
-int texNumber = 0;
+int Loader::vaoNumber = 0;
+int Loader::vboNumber = 0;
+int Loader::texNumber = 0;
 
-GLuint createVAO();
-GLuint storeDataInAttributeList(int, int, std::vector<float>*);
-void unbindVAO();
-GLuint bindIndiciesBuffer(std::vector<int>*);
-
-RawModel Loader_loadToVAO(std::vector<float>* positions, std::vector<float>* textureCoords, std::vector<float>* normals, std::vector<int>* indicies)
+RawModel Loader::loadToVAO(std::vector<float>* positions, std::vector<float>* textureCoords, std::vector<float>* normals, std::vector<int>* indicies)
 {
 	GLuint vaoID = createVAO();
 	std::list<GLuint> vboIDs;
@@ -42,7 +37,7 @@ RawModel Loader_loadToVAO(std::vector<float>* positions, std::vector<float>* tex
 }
 
 //for text
-std::vector<int> Loader_loadToVAO(std::vector<float>* positions, std::vector<float>* textureCoords)
+std::vector<int> Loader::loadToVAO(std::vector<float>* positions, std::vector<float>* textureCoords)
 {
 	std::vector<int> vertexObjects;
 
@@ -55,7 +50,7 @@ std::vector<int> Loader_loadToVAO(std::vector<float>* positions, std::vector<flo
 }
 
 //for water
-RawModel Loader_loadToVAO(std::vector<float>* positions, int dimensions)
+RawModel Loader::loadToVAO(std::vector<float>* positions, int dimensions)
 {
 	GLuint vaoID = createVAO();
 	std::list<GLuint> vboIDs;
@@ -67,7 +62,7 @@ RawModel Loader_loadToVAO(std::vector<float>* positions, int dimensions)
 	return RawModel(vaoID, (int)positions->size() / dimensions, &vboIDs);
 }
 
-GLuint Loader_loadTexture(const char* fileName)
+GLuint Loader::loadTexture(const char* fileName)
 {
 	GLuint textureID = 0;
 	glGenTextures(1, &textureID);
@@ -122,7 +117,7 @@ GLuint Loader_loadTexture(const char* fileName)
 	return textureID;
 }
 
-GLuint Loader_loadTextureNoInterpolation(const char* fileName)
+GLuint Loader::loadTextureNoInterpolation(const char* fileName)
 {
 	GLuint textureID = 0;
 	glGenTextures(1, &textureID);
@@ -160,7 +155,7 @@ GLuint Loader_loadTextureNoInterpolation(const char* fileName)
 	return textureID;
 }
 
-GLuint createVAO()
+GLuint Loader::createVAO()
 {
 	GLuint vaoID = 0;
 	glGenVertexArrays(1, &vaoID);
@@ -170,7 +165,7 @@ GLuint createVAO()
 	return vaoID;
 }
 
-GLuint storeDataInAttributeList(int attributeNumber, int coordinateSize, std::vector<float>* data)
+GLuint Loader::storeDataInAttributeList(int attributeNumber, int coordinateSize, std::vector<float>* data)
 {
 	GLuint vboID = 0;
 	glGenBuffers(1, &vboID);
@@ -185,7 +180,7 @@ GLuint storeDataInAttributeList(int attributeNumber, int coordinateSize, std::ve
 	return vboID;
 }
 
-GLuint bindIndiciesBuffer(std::vector<int>* indicies)
+GLuint Loader::bindIndiciesBuffer(std::vector<int>* indicies)
 {
 	GLuint vboID = 0;
 	glGenBuffers(1, &vboID);
@@ -198,12 +193,12 @@ GLuint bindIndiciesBuffer(std::vector<int>* indicies)
 	return vboID;
 }
 
-void unbindVAO()
+void Loader::unbindVAO()
 {
 	glBindVertexArray(0);
 }
 
-void Loader_cleanUp()
+void Loader::cleanUp()
 {
 	for (auto vaoID : vaos)
 	{
@@ -227,28 +222,28 @@ void Loader_cleanUp()
 	textures.clear();
 }
 
-void Loader_deleteVAO(GLuint vaoID)
+void Loader::deleteVAO(GLuint vaoID)
 {
 	vaoNumber--;
 	glDeleteVertexArrays(1, &vaoID);
 	vaos.remove(vaoID);
 }
 
-void Loader_deleteVBO(GLuint vboID)
+void Loader::deleteVBO(GLuint vboID)
 {
 	vboNumber--;
 	glDeleteBuffers(1, &vboID);
 	vbos.remove(vboID);
 }
 
-void Loader_deleteTexture(GLuint texID)
+void Loader::deleteTexture(GLuint texID)
 {
 	texNumber--;
 	glDeleteTextures(1, &texID);
 	textures.remove(texID);
 }
 
-void Loader_deleteTexturedModels(std::list<TexturedModel*>* tm)
+void Loader::deleteTexturedModels(std::list<TexturedModel*>* tm)
 {
 	for (auto model : (*tm))
 	{
@@ -256,7 +251,7 @@ void Loader_deleteTexturedModels(std::list<TexturedModel*>* tm)
 	}
 }
 
-void Loader_printInfo()
+void Loader::printInfo()
 {
 	std::fprintf(stdout, "VAO Count = %d = %d\n", vaoNumber, (int)vaos.size());
 	std::fprintf(stdout, "VBO Count = %d = %d\n", vboNumber, (int)vbos.size());
@@ -271,7 +266,7 @@ void Loader_printInfo()
 	}
 }
 
-GLuint Loader_loadShader(const char* file, int shaderType)
+GLuint Loader::loadShader(const char* file, int shaderType)
 {
 	std::ifstream sourceFile;
 	sourceFile.open(file);

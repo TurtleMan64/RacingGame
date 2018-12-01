@@ -25,8 +25,9 @@
 #include <algorithm>
 #include <fstream>
 
-std::list<TexturedModel*> Car::models  [30];
-std::list<EngineExhaust>  Car::exhausts[30];
+std::list<TexturedModel*> Car::models[30];
+std::list<EngineExhaust> Car::exhausts[30];
+MachineStats Car::machineBaseStats[30];
 
 extern float dt;
 
@@ -54,6 +55,11 @@ Car::Car(int vehicleID, float x, float y, float z, float xDir, float yDir, float
 
 void Car::step()
 {
+	if (isDead)
+	{
+		return;
+	}
+
 	canMoveTimer    = std::fmaxf(0.0f, canMoveTimer    - dt);
 	boostDelayTimer = std::fmaxf(0.0f, boostDelayTimer - dt);
 	slipTimer       = std::fmaxf(0.0f, slipTimer       - dt);
@@ -63,11 +69,19 @@ void Car::step()
 	if (deadTimer >= 0.0f)
 	{
 		deadTimer += dt;
+		if (deadTimer > 4.0f && !isDead)
+		{
+			explode();
+		}
 	}
 
 	if (fallOutTimer >= 0.0f)
 	{
 		fallOutTimer += dt;
+		if (fallOutTimer > 4.0f && !isDead)
+		{
+			explode();
+		}
 	}
 
 	setInputs();
@@ -153,10 +167,20 @@ void Car::step()
 	{
 		slipPunishScale = slipPunishScale*slipNegativePower;
 	}
+
+	if (slipPunishScale > 0)
+	{
+		slipPunishScale = 0;
+	}
+
+	if (!inputGas && slipPunishScale < 0)
+	{
+		slipPunishScale = 0;
+	}
 	
 	//turn due to slipping
 	float xIn2 = -slipPower*(slipAngle/slipAngleMax)*dt;
-	vel.scale(1 - slipPunishScale*(std::fabsf((slipAngle/slipAngleMax)*dt))); //slow down
+	vel.scale(1 - slipPunishScale*(std::fabsf((slipAngle/slipAngleMax)*dt))); //slow down or speed up
 	float u2 = currNorm.x;
 	float v2 = currNorm.y;
 	float w2 = currNorm.z;
@@ -238,7 +262,7 @@ void Car::step()
 	{
 		if (boostDelayTimer == 0.0f && onPlane && health > 0.0f)
 		{
-			AudioPlayer::play(2, getPosition());
+			AudioPlayer::play(boostIndex, getPosition());
 
 			float boostRatio = 1.0f;
 			if (health < boostHealthPunish)
@@ -369,10 +393,10 @@ void Car::step()
 	{
 		float yIn = (inputDive*diveSpeed)*dt;
 
-		//if (vel.y > 0)
-		//{
-			//yIn = fminf(yIn, 0);
-		//}
+		if (vel.y > 0)
+		{
+			yIn = fminf(yIn, 0);
+		}
 
 		Vector3f perpen = vel.cross(&currNorm);
 
@@ -390,9 +414,19 @@ void Car::step()
 
 		if (fabsf(Maths::compareTwoAngles(newAngle, oldAngle)) < 90)
 		{
-			vel.x = buf[0];
-			vel.y = buf[1];
-			vel.z = buf[2];
+			if (vel.y < 0 && buf[1] > 0)
+			{
+				vel.x = buf[0];
+				vel.y = 0;
+				vel.z = buf[2];
+			}
+			else
+			{
+				vel.x = buf[0];
+				vel.y = buf[1];
+				vel.z = buf[2];
+			}
+
 			if (inputDive > 0)
 			{
 				vel.scale(1 - inputDive*divePunish*dt); //slow down when diving
@@ -479,6 +513,8 @@ void Car::step()
 			float dotProduct = currNorm.dot(colNormal);
 			if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall())
 			{
+				float velBefore = vel.length();
+
 				Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
 				Vector3f newDir = bounceVec + bounceVec + overallVel;
 				newDir.normalize();
@@ -492,6 +528,12 @@ void Car::step()
 				float speedFactor = overallVel.length()/terminalSpeed;
 				float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
 				health -= hitWallHealthPunish*angleFactor*speedFactor;
+
+				if (health < 0.0f)
+				{
+					vel.normalize();
+					vel.scale(std::fminf(velBefore*1.2f, 700));
+				}
 
 				canMoveTimer = hitWallTimePunish;
 				AudioPlayer::play(4, getPosition());
@@ -548,6 +590,8 @@ void Car::step()
 						dotProduct = currNorm.dot(colNormal);
 						if (dotProduct < smoothTransitionThreshold || CollisionChecker::getCollideTriangle()->isWall())
 						{
+							float velBefore = vel.length();
+
 							Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
 							Vector3f newDir = bounceVec + bounceVec + overallVel;
 							newDir.normalize();
@@ -561,6 +605,12 @@ void Car::step()
 							float speedFactor = overallVel.length()/terminalSpeed;
 							float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
 							health -= hitWallHealthPunish*angleFactor*speedFactor;
+
+							if (health < 0.0f)
+							{
+								vel.normalize();
+								vel.scale(std::fminf(velBefore*1.2f, 700));
+							}
 
 							canMoveTimer = hitWallTimePunish;
 							AudioPlayer::play(4, getPosition());
@@ -655,6 +705,8 @@ void Car::step()
 			{
 				CollisionChecker::falseAlarm();
 
+				float velBefore = vel.length();
+
 				Vector3f bounceVec = Maths::bounceVector(&overallVel, colNormal, 1.0f);
 				Vector3f newDir = bounceVec + bounceVec + overallVel;
 				newDir.normalize();
@@ -668,6 +720,12 @@ void Car::step()
 				float speedFactor = overallVel.length()/terminalSpeed;
 				float angleFactor = std::fabsf(overallVelNorm.dot(colNormal));
 				health -= hitWallHealthPunish*angleFactor*speedFactor;
+
+				if (health < 0.0f)
+				{
+					vel.normalize();
+					vel.scale(std::fminf(velBefore*1.2f, 700));
+				}
 
 				canMoveTimer = hitWallTimePunish;
 				AudioPlayer::play(4, getPosition());
@@ -794,6 +852,11 @@ void Car::step()
 		rotZ = pitchAngle;
 		rotRoll = 10*(inputL - inputR)*(vel.length()/terminalSpeed);
 
+		if (health < 0.0f)
+		{
+			rotX = diff + deadTimer*720;
+		}
+
 		updateTransformationMatrix();
 	}
 	else
@@ -810,6 +873,11 @@ void Car::step()
 		rotY = yawAngle;
 		rotZ = pitchAngle+90;
 		rotRoll = 10*(inputL - inputR)*(vel.length()/terminalSpeed);
+
+		if (health < 0.0f)
+		{
+			rotX = 0 + deadTimer*720;
+		}
 
 		updateTransformationMatrix();
 	}
@@ -972,7 +1040,7 @@ void Car::step()
 			deadTimer = 0.0f;
 		}
 	}
-	if (onPlane && currentTriangle->isHeal() && deadTimer < 0.0f)
+	else if (onPlane && currentTriangle->isHeal() && deadTimer < 0.0f)
 	{
 		health += healRate*dt;
 	}
@@ -1050,6 +1118,8 @@ void Car::step()
 		}
 	}
 
+	baseColour.set(1, 1, 1);
+
 	if (health >= 0.0f && health <= 0.3f)
 	{
 		if (sourceDanger == nullptr)
@@ -1061,6 +1131,9 @@ void Car::step()
 		{
 			sourceDanger->setPitch(1.9f - 3*health);
 			sourceDanger->setPosition(getX(), getY(), getZ());
+
+			float t = sourceDanger->getSoundCompletion();
+			baseColour.set(0.5f+t/2, t, t);
 		}
 	}
 	else
@@ -1070,6 +1143,11 @@ void Car::step()
 			sourceDanger->stop();
 			sourceDanger = nullptr;
 		}
+
+		if (health < 0.0f)
+		{
+			baseColour.set(0.25f, 0.05f, 0.05f);
+		}
 	}
 
 	if (onPlane && currentTriangle->isHeal())
@@ -1078,6 +1156,7 @@ void Car::step()
 		{
 			sourceHeal = AudioPlayer::play(1, &position, 1.0f, true);
 		}
+		baseColour.set(1.9f, 1.5f, 1.7f);
 	}
 	else
 	{
@@ -1136,15 +1215,18 @@ void Car::checkpointTest()
 	{
 		if (check->isPointInsideMe(getPosition()))
 		{
-			newCheckpointID = check->ID;
-			myCheck = check;
+			if (newCheckpointID == -1 || check->ID < newCheckpointID)
+			{
+				newCheckpointID = check->ID;
+				myCheck = check;
+			}
 		}
 	}
 
 	if (newCheckpointID == -1 && fallOutTimer < 0.0f)
 	{
-		//AudioPlayer::play(12, getPosition());
-		//fallOutTimer = 0.0f;
+		AudioPlayer::play(12, getPosition());
+		fallOutTimer = 0.0f;
 	}
 
 	if (newCheckpointID != -1 && newCheckpointID != lastCheckpointID)
@@ -1205,6 +1287,48 @@ void Car::checkpointTest()
 	//std::fprintf(stdout, "currentLap = %d    lapDistance = %d    checkID = %d\n", currentLap, lapDistance, newCheckpointID);
 }
 
+void Car::explode()
+{
+	if (sourceEngine       != nullptr) sourceEngine->stop();
+	if (sourceStrafe       != nullptr) sourceEngine->stop();
+	if (sourceSlipSlowdown != nullptr) sourceEngine->stop();
+	if (sourceDanger       != nullptr) sourceEngine->stop();
+	if (sourceHeal         != nullptr) sourceEngine->stop();
+
+	vel.normalize();
+	vel.scale(VEL_SLOWEST);
+
+	AudioPlayer::play(18, getPosition());
+	isDead = true;
+	visible = false;
+
+	float height = 0.0f;
+	float spread = 4.0f;
+
+	for (int i = 7; i != 0; i--)
+	{
+		Vector3f pos(
+			getX() + spread*(Maths::random() - 0.5f),
+			getY() + spread*(Maths::random() - 0.5f) + height,
+			getZ() + spread*(Maths::random() - 0.5f));
+
+		Vector3f vel2(0, 0, 0);
+
+		new Particle(ParticleResources::textureExplosion1, &pos, &vel2,
+			0, 1.5f, 0, 0.5f * Maths::random() + 1.0f, 0, false, false);
+	}
+
+	Vector3f pos(
+		getX(),
+		getY() + height,
+		getZ());
+
+	Vector3f vel2(0, 0, 0);
+	
+	new Particle(ParticleResources::textureExplosion2, &pos, &vel2,
+		0, 2.0f, 0, 3.0f, 0, false, false);
+}
+
 void Car::giveMeABoost()
 {
 	boostDelayTimer = boostDelayMax*1.0f;
@@ -1219,6 +1343,13 @@ void Car::giveMeABoost()
 		vel.y*=ratio;
 		vel.z*=ratio;
 	}
+}
+
+void Car::giveMeAJump()
+{
+	vel.y += 120;
+	position.y += 5;
+	onPlane = false;
 }
 
 void Car::setVelocity(float xVel, float yVel, float zVel)
@@ -1292,8 +1423,12 @@ void Car::loadVehicleInfo()
 		std::string engineFilename = "";
 		switch (vehicleID)
 		{
-			case 0: engineFilename = "res/Models/Machines/BlueFalcon/Engine.ini"; break;
-			case 1: engineFilename = "res/Models/Machines/Arwing/Engine.ini";     break;
+			case 0: engineFilename = "res/Models/Machines/BlueFalcon/Engine.ini";   break;
+			case 1: engineFilename = "res/Models/Machines/Arwing/Engine.ini";       break;
+			case 2: engineFilename = "res/Models/Machines/RedGazelle/Engine.ini";   break;
+			case 3: engineFilename = "res/Models/Machines/TwinNorita/Engine.ini";   break;
+			case 4: engineFilename = "res/Models/Machines/BlackBull/Engine.ini";    break;
+			case 5: engineFilename = "res/Models/Machines/SonicPhantom/Engine.ini"; break;
 			default: break;
 		}
 
@@ -1334,6 +1469,75 @@ void Car::loadVehicleInfo()
 		}
 	}
 
+	//if (Car::machineBaseStats[vehicleID].weight = 0)
+	{
+		std::string statsFilename = "";
+		switch (vehicleID)
+		{
+			case 0: statsFilename = "res/Models/Machines/BlueFalcon/Machine.ini";   break;
+			case 1: statsFilename = "res/Models/Machines/Arwing/Machine.ini";       break;
+			case 2: statsFilename = "res/Models/Machines/RedGazelle/Machine.ini";   break;
+			case 3: statsFilename = "res/Models/Machines/TwinNorita/Machine.ini";   break;
+			case 4: statsFilename = "res/Models/Machines/BlackBull/Machine.ini";    break;
+			case 5: statsFilename = "res/Models/Machines/SonicPhantom/Machine.ini"; break;
+			default: break;
+		}
+
+		std::ifstream file(statsFilename);
+		if (!file.is_open())
+		{
+			std::fprintf(stderr, "Error: Cannot load file '%s'\n", statsFilename.c_str());
+			file.close();
+		}
+		else
+		{
+			std::string line;
+			char lineBuf[512];
+			int splitLength;
+
+			getline(file, line);
+			getline(file, line);
+
+			memcpy(lineBuf, line.c_str(), line.size()+1);
+			char** lineSplit = split(lineBuf, ';', &splitLength);
+
+			terminalSpeed        = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			terminalAccelGas	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			terminalAccelBrake	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			terminalAccelCoast	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			turnSpeed			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			turnPunish			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			diveSpeed			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			divePunish			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			strafePercentage	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			strafeTerminalPunish = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipTimerMax		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipThreshold		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipAngleAccel		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipAngleMax		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipPower			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipNegativePower	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipPositivePower	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			slipTimerThreshold	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			spinTimeMax			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			spinTimeDelay		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			sideAttackTimeMax	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			sideAttackSpeed		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostSpeed			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostKick			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostDuration		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostDelayMax		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostHealthPunish	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			healRate			 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			hitWallHealthPunish	 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			weight				 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			gravityForce		 = std::stof(lineSplit[1], nullptr); free(lineSplit); getline(file, line); memcpy(lineBuf, line.c_str(), line.size()+1); lineSplit = split(lineBuf, ';', &splitLength);
+			boostIndex           = std::stoi(lineSplit[1], nullptr, 10); free(lineSplit);
+
+			file.close();
+		}
+	}
+
 	if (Car::models[vehicleID].size() > 0)
 	{
 		return;
@@ -1347,8 +1551,12 @@ void Car::loadVehicleInfo()
 	std::string modelName = "";
 	switch (vehicleID)
 	{
-		case 0: modelFolder = "res/Models/Machines/BlueFalcon/"; modelName = "BlueFalcon"; break;
-		case 1: modelFolder = "res/Models/Machines/Arwing/";     modelName = "Arwing";     break;
+		case 0: modelFolder = "res/Models/Machines/BlueFalcon/";   modelName = "GX";           break;
+		case 1: modelFolder = "res/Models/Machines/Arwing/";       modelName = "Arwing";       break;
+		case 2: modelFolder = "res/Models/Machines/RedGazelle/";   modelName = "RedGazelle";   break;
+		case 3: modelFolder = "res/Models/Machines/TwinNorita/";   modelName = "TwinNorita";   break;
+		case 4: modelFolder = "res/Models/Machines/BlackBull/";    modelName = "BlackBull";    break;
+		case 5: modelFolder = "res/Models/Machines/SonicPhantom/"; modelName = "SonicPhantom"; break;
 		default: break;
 	}
 	loadModel(&Car::models[vehicleID], modelFolder, modelName);

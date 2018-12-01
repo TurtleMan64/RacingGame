@@ -1,0 +1,183 @@
+# Material Count: 20
+
+newmtl gxmat47
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 21.png
+
+newmtl gxmat2
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 10.png
+
+newmtl gxmat25
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 32.png
+
+newmtl gxmat15
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 34.png
+
+newmtl gxmat4.001
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 12.png
+
+newmtl gxmat21
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 31.png
+
+newmtl gxmat17
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 23.png
+
+newmtl gxmat20
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 25.png
+
+newmtl gxmat49.001
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+glow 1.0
+scrollX 0
+scrollY 0
+map_Kd 16.png
+
+newmtl gxmat14
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 29.png
+
+newmtl gxmat18
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 27.png
+
+newmtl gxmat37
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 7.png
+
+newmtl gxmat1
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 5.png
+
+newmtl gxmat52
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 19.png
+
+newmtl gxmat40
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 33.png
+
+newmtl gxmat16
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 24.png
+
+newmtl gxmat22
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 30.png
+
+newmtl gxmat19
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 26.png
+
+newmtl gxmat38
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 6.png
+
+newmtl gxmat13
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+scrollX 0
+scrollY 0
+map_Kd 28.png
+

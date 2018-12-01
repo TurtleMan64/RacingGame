@@ -1,0 +1,39 @@
+Tracks/Doko
+Doko
+Tracks/Doko
+1
+Doko 8
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0006 2.0
+111
+540 9
+1
+4
+res/Audio/BGM/WarioColosseum_intro.ogg
+res/Audio/BGM/WarioColosseum_loop.ogg
+res/Audio/BGM/WarioColosseumFL_intro.ogg
+res/Audio/BGM/WarioColosseumFL_loop.ogg
+0 0 0
+0 0
+-200
+
+6 0 0.001 0
+
+# Pass 2
+#2 res/Models/Tracks/WarioColosseum/ Pass2
+
+# Pass 3
+#3 res/Models/Tracks/WarioColosseum/ Pass3
+
+# Transparent
+#4 res/Models/Tracks/WarioColosseum/ Transparent
+
+
+10 0 -0.5877924 0.5256916 -42.88122 56.125 29.125 42.625 0
+10 0 -931.473 462.843 -36.0493 100.5 100.5 100.125 1
+10 0 -14.82152 -0.1392429 37.72877 68.5 14.5 38.125 2

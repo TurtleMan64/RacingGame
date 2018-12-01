@@ -39,15 +39,6 @@ scrollX 0
 scrollY 0
 map_Kd 120.png
 
-newmtl gxmat57
-Ns 17.647059
-Ni 1.000000
-Tr 1
-d 1.000000
-scrollX 0
-scrollY 0
-map_Kd 20.png
-
 newmtl gxmat122.001
 Ns 17.647059
 Ni 1.000000

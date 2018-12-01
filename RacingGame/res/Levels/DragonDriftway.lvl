@@ -1,0 +1,39 @@
+Tracks/DragonDriftway
+Collision
+Tracks/DragonDriftway
+1
+Collision 8
+1.0 1.0 1.0
+0.0 0.0 0.0
+0.933 0.882 0.8157
+0.0 0.0 0.0
+0.933 0.882 0.8157
+0.0 0.0 0.0
+0.0007 3.0
+111
+540 9
+1
+4
+res/Audio/BGM/aeropolis_intro.ogg
+res/Audio/BGM/aeropolis_loop.ogg
+res/Audio/BGM/aeropolis_b_intro.ogg
+res/Audio/BGM/aeropolis_b_loop.ogg
+0 0 0
+0 0
+-200
+
+6 0 0.001 0
+
+# Pass 2
+# 2 res/Models/Tracks/DragonRoad/ Pass2
+
+# Pass 3
+# 3 res/Models/Tracks/DragonRoad/ Pass3
+
+# Transparent
+# 4 res/Models/Tracks/DragonRoad/ Transparent
+
+
+
+10 0 -0.5877924 0.5256916 -42.88122 56.125 29.125 42.625 0
+10 0 -14.82152 -0.1392429 37.72877 68.5 14.5 38.125 1

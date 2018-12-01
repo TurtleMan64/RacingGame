@@ -31,6 +31,7 @@
 #include "../entities/camera.h"
 #include "../entities/RainbowRoad/RR_backgroundstars.h"
 #include "../entities/checkpoint.h"
+#include "../entities/jumpramp.h"
 
 void LevelLoader::loadTitle()
 {
@@ -592,7 +593,7 @@ void LevelLoader::processLine(char** dat, int /*datLength*/)
 
 		case 6: //Car
 		{
-			Car* car = new Car(1, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
+			Car* car = new Car(0, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
 			Global::gameMainVehicle = car;
 			Main_addEntity(car);
 			return;
@@ -634,6 +635,16 @@ void LevelLoader::processLine(char** dat, int /*datLength*/)
 				toFloat(dat[4]), toFloat(dat[5]), toFloat(dat[6]),
 				toFloat(dat[7]), toInt(dat[8])); INCR_NEW
 			Global::gameCheckpointList.push_back(checkpoint);
+			return;
+		}
+
+		case 11: //JumpPad
+		{
+			JumpRamp::loadStaticModels();
+			JumpRamp* ramp = new JumpRamp(
+				toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]),
+				toFloat(dat[4])); INCR_NEW
+			Main_addTransparentEntity(ramp);
 			return;
 		}
 
@@ -728,4 +739,5 @@ void LevelLoader::freeAllStaticModels()
 	Car::deleteStaticModels();
 	RR_BackgroundStars::deleteModels();
 	Checkpoint::deleteStaticModels();
+	JumpRamp::deleteStaticModels();
 }

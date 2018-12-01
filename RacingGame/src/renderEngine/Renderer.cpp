@@ -56,8 +56,8 @@ void EntityRenderer::renderNEW(std::unordered_map<TexturedModel*, std::list<Enti
 
 void EntityRenderer::prepareTexturedModel(TexturedModel* model)
 {
-	RawModel* rawModel = (*model).getRawModel();
-	glBindVertexArray((*rawModel).getVaoID());
+	RawModel* rawModel = model->getRawModel();
+	glBindVertexArray(rawModel->getVaoID());
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -77,7 +77,7 @@ void EntityRenderer::prepareTexturedModel(TexturedModel* model)
 	shader->loadGlowAmount(texture->getGlowAmount());
 	shader->loadTextureOffsets(clockTime*texture->getScrollX(), clockTime*texture->getScrollY());
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, (*(*model).getTexture()).getID());
+	glBindTexture(GL_TEXTURE_2D, texture->getID());
 }
 
 void EntityRenderer::unbindTexturedModel()
@@ -91,6 +91,7 @@ void EntityRenderer::unbindTexturedModel()
 void EntityRenderer::prepareInstance(Entity* entity)
 {
 	shader->loadTransformationMatrix(entity->getTransformationMatrix());
+	shader->loadBaseColour(entity->getBaseColour());
 }
 
 void EntityRenderer::render(Entity* entity)

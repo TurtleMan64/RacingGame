@@ -1,0 +1,38 @@
+# Material Count: 4
+
+newmtl m9
+Ns 19.607843
+Ni 0.02
+Tr 0
+map_d wariSS06.png
+scrollX 0
+scrollY 0
+map_Kd wariSS06.png
+
+newmtl m11
+Ns 19.607843
+Ni 0.02
+Tr 0
+map_d wariSS04.png
+scrollX 0
+scrollY 0
+map_Kd wariSS04.png
+
+newmtl m13
+Ns 19.607843
+Ni 0.02
+Tr 1
+map_d wariSS02.png
+scrollX 0
+scrollY 0
+map_Kd wariSS02.png
+
+newmtl m12
+Ns 19.607843
+Ni 0.02
+Tr 0
+map_d wariSS03.png
+scrollX 0
+scrollY 0
+map_Kd wariSS03.png
+

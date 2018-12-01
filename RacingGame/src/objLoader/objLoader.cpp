@@ -193,7 +193,7 @@ int loadBinaryModel(std::list<TexturedModel*>* models, std::string filePath, std
 		std::vector<float> texturesArray;
 		std::vector<float> normalsArray;
 		convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-		rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+		rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
 	}
 
 	fclose(file);
@@ -347,7 +347,7 @@ int loadObjModel(std::list<TexturedModel*>* models, std::string filePath, std::s
 					std::vector<float> normalsArray;
 
 					convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-					rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+					rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
 
 					indices.clear();
 				}
@@ -367,7 +367,7 @@ int loadObjModel(std::list<TexturedModel*>* models, std::string filePath, std::s
 	std::vector<float> normalsArray;
 
 	convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-	rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+	rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
 
 	//go through rawModelsList and modelTextures to construct and add to the given TexturedModel list
 	for (unsigned int i = 0; i < rawModelsList.size(); i++)
@@ -451,7 +451,7 @@ void parseMtl(std::string filePath, std::string fileName)
 			{
 				std::string imageFilenameString = filePath+lineSplit[1];
 				char* fname = (char*)imageFilenameString.c_str();
-				ModelTexture newTexture(Loader_loadTexture(fname)); //generate new texture
+				ModelTexture newTexture(Loader::loadTexture(fname)); //generate new texture
 				newTexture.setShineDamper(currentShineDamperValue);
 				newTexture.setReflectivity(currentReflectivityValue);
 				newTexture.setHasTransparency(1);
@@ -629,7 +629,7 @@ int loadObjModelWithMTL(std::list<TexturedModel*>* models, std::string filePath,
 					std::vector<float> normalsArray;
 
 					convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-					rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+					rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
 
 					indices.clear();
 				}
@@ -645,7 +645,7 @@ int loadObjModelWithMTL(std::list<TexturedModel*>* models, std::string filePath,
 	std::vector<float> normalsArray;
 
 	convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-	rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices)); //put a copy of the final model into rawModelsList
+	rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices)); //put a copy of the final model into rawModelsList
 
 	//go through rawModelsList and modelTextures to construct and add to the given TexturedModel list
 	for (unsigned int i = 0; i < rawModelsList.size(); i++)
@@ -796,7 +796,7 @@ int loadBinaryModelWithMTL(std::list<TexturedModel*>* models, std::string filePa
 		std::vector<float> texturesArray;
 		std::vector<float> normalsArray;
 		convertDataToArrays(&vertices, &textures, &normals, &verticesArray, &texturesArray, &normalsArray);
-		rawModelsList.push_back(Loader_loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
+		rawModelsList.push_back(Loader::loadToVAO(&verticesArray, &texturesArray, &normalsArray, &indices));
 	}
 
 	fclose(file);

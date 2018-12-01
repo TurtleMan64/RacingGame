@@ -1,0 +1,32 @@
+# Material Count: 3
+
+newmtl gxmat36
+Ns 20
+Ni 0.02
+Tr 1
+d 0.000000
+scrollX 0
+scrollY 0
+map_Kd 36.png
+
+newmtl gxmat4
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+type brake
+scrollX 0
+scrollY 0
+map_Kd 12.png
+
+newmtl gxmat49
+Ns 20
+Ni 0.02
+Tr 1
+d 1.000000
+type heal
+glow 1.0
+scrollX 0
+scrollY 0
+map_Kd 16.png
+

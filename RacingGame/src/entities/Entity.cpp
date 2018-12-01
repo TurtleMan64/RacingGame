@@ -22,6 +22,7 @@ Entity::Entity()
 	this->rotRoll = 0;
 	this->scale = 1;
 	this->visible = true;
+	this->baseColour.set(1,1,1);
 }
 
 Entity::Entity(Vector3f* position, float rotX, float rotY, float rotZ, float scale)
@@ -35,6 +36,7 @@ Entity::Entity(Vector3f* position, float rotX, float rotY, float rotZ, float sca
 	this->rotRoll = 0;
 	this->scale = scale;
 	this->visible = true;
+	this->baseColour.set(1,1,1);
 }
 
 Entity::~Entity()
@@ -106,6 +108,16 @@ void Entity::setPosition(float newX, float newY, float newZ)
 	this->position.x = newX;
 	this->position.y = newY;
 	this->position.z = newZ;
+}
+
+Vector3f* Entity::getBaseColour()
+{
+	return &baseColour;
+}
+
+void Entity::setBaseColour(float red, float green, float blue)
+{
+	baseColour.set(red, green, blue);
 }
 
 float Entity::getRotX()

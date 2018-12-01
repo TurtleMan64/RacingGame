@@ -1,0 +1,21 @@
+# Material Count: 2
+
+newmtl m13
+Ns 20
+Ni 0.02
+Tr 0
+map_d wariSS02.png
+scrollX 0
+scrollY 0
+map_Kd wariSS02.png
+
+newmtl m15.001
+Ns 20
+Ni 0.02
+Tr 0
+glow 1.0
+map_d wariSS00.png
+scrollX 0
+scrollY 0
+map_Kd wariSS00.png
+

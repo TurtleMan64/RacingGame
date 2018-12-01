@@ -25,7 +25,7 @@ void AudioPlayer::loadSoundEffects()
 {
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boostpad.ogg"));           //0
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Healpad.ogg"));            //1
-	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/boost_falcon.ogg"));       //2
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_falcon.ogg")); //2
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Intro321GO.ogg"));         //3
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/HitWall.ogg"));            //4
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Engine.ogg"));             //5
@@ -36,6 +36,13 @@ void AudioPlayer::loadSoundEffects()
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/AnnounceFinalLap.ogg"));   //10
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/FallFemale.ogg"));         //11
 	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/FallMale.ogg"));           //12
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_bull.ogg"));   //13
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_falcon.ogg")); //14
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_norita.ogg")); //15
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_phantom.ogg"));//16
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/Boost/boost_wyvern.ogg")); //17
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/ExplosionBig.ogg"));       //18
+	AudioPlayer::buffersSE.push_back(AudioMaster::loadOGG("res/Audio/SFX/ExplosionSmall.ogg"));     //19
 }
 
 void AudioPlayer::loadBGM(char* fileName)
@@ -119,6 +126,12 @@ Source* AudioPlayer::play(int buffer, Vector3f* pos, float pitch, bool loop)
 //with everything
 Source* AudioPlayer::play(int buffer, Vector3f* pos, float pitch, bool loop, float xVel, float yVel, float zVel)
 {
+	if (buffer >= AudioPlayer::buffersSE.size())
+	{
+		std::fprintf(stderr, "Error: Index out of bounds on SE buffers\n");
+		return nullptr;
+	}
+
 	for (int i = 0; i < 14; i++)
 	{
 		Source* src = AudioPlayer::sources[i];

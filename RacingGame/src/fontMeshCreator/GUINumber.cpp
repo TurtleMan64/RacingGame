@@ -56,14 +56,14 @@ void GUINumber::createNumber(int i, float x, float y, float w, float h)
 	texCoords.push_back(x+w);  //bottom right
 	texCoords.push_back(y+h);
 
-	std::vector<int> vertexObjects = Loader_loadToVAO(&positions, &texCoords);
+	std::vector<int> vertexObjects = Loader::loadToVAO(&positions, &texCoords);
 	GUINumber::numberMeshIDs[i] = (GLuint)vertexObjects[0];
 	GUINumber::numberMeshVertexCounts[i] = 6;
 }
 
 void GUINumber::loadMeshData()
 {
-	GUINumber::numberFont = new FontType(Loader_loadTexture("res/Fonts/vipnagorgialla.png"), "res/Fonts/vipnagorgialla.fnt"); INCR_NEW
+	GUINumber::numberFont = new FontType(Loader::loadTexture("res/Fonts/vipnagorgialla.png"), "res/Fonts/vipnagorgialla.fnt"); INCR_NEW
 
 	const float ts = 512; //size of the image used as the font atlas
 

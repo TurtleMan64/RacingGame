@@ -34,6 +34,10 @@ public:
 
 	void setPosition(float x, float y, float z);
 
+	//Returns how much percentage the sound is to being completed.
+	// So 0 if the sound just started, 0.5 if the sound is halfway done, 1 if sound is finished.
+	float getSoundCompletion();
+
 	ALuint getSourceID();
 
 	ALuint getLastPlayedBufferID();

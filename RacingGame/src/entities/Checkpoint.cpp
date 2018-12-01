@@ -82,7 +82,7 @@ void Checkpoint::loadStaticModels()
 	std::fprintf(stdout, "Loading Checkpoint static models...\n");
 	#endif
 
-	loadObjModel(&Checkpoint::models, "res/Models/Box/", "CamBox.obj");
+	loadModel(&Checkpoint::models, "res/Models/Misc/Box/", "Box");
 }
 
 void Checkpoint::deleteStaticModels()

@@ -39,25 +39,23 @@ public:
 		float px2, float py2, float pz2);
 
 	static bool checkPointInTriangle3D(
-		double checkx, double checky, double checkz,
-		double cx1, double cy1, double cz1,
-		double cx2, double cy2, double cz2,
-		double cx3, double cy3, double cz3,
-		double nX, double nY, double nZ);
+		float checkx, float checky, float checkz,
+		float cx1,    float cy1,    float cz1,
+		float cx2,    float cy2,    float cz2,
+		float cx3,    float cy3,    float cz3,
+		float nX,     float nY,     float nZ);
 
 	static bool checkPointInTriangle2D(
-		double x, double y,
-		double x1, double y1,
-		double x2, double y2,
-		double x3, double y3);
+		float x,  float y,
+		float x1, float y1,
+		float x2, float y2,
+		float x3, float y3);
 
 	//delete's all collide models
 	static void deleteAllCollideModels();
 
 	//use this when reloading the same level - then you dont have to regenerate the quad trees
 	static void deleteAllCollideModelsExceptQuadTrees();
-
-	//static void deleteStageCollideModel();
 
 	static void deleteCollideModel(CollisionModel* cm);
 

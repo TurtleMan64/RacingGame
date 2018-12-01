@@ -18,8 +18,8 @@ float matrixBuffer[16];
 
 ShaderProgram::ShaderProgram(const char* vertexFile, const char* fragmentFile)
 {
-	vertexShaderID = Loader_loadShader(vertexFile, GL_VERTEX_SHADER);
-	fragmentShaderID = Loader_loadShader(fragmentFile, GL_FRAGMENT_SHADER);
+	vertexShaderID = Loader::loadShader(vertexFile, GL_VERTEX_SHADER);
+	fragmentShaderID = Loader::loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 	programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, fragmentShaderID);
@@ -93,6 +93,12 @@ void ShaderProgram::loadGlowAmount(float glowAmount)
 	loadFloat(location_glowAmount, glowAmount);
 }
 
+void ShaderProgram::loadBaseColour(Vector3f* baseColour)
+{
+	//std::fprintf(stdout, "baseColour = %f %f %f\n", baseColour->x, baseColour->y, baseColour->z);
+	loadVector(location_baseColour, baseColour);
+}
+
 void ShaderProgram::loadTextureOffsets(float offX, float offY)
 {
 	loadFloat(location_texOffX, offX);
@@ -150,6 +156,7 @@ void ShaderProgram::getAllUniformLocations()
 	location_useFakeLighting       = getUniformLocation("useFakeLighting");
 	location_hasTransparency       = getUniformLocation("hasTransparency");
 	location_glowAmount            = getUniformLocation("glowAmount");
+	location_baseColour            = getUniformLocation("baseColour");
 	location_texOffX               = getUniformLocation("texOffX");
 	location_texOffY               = getUniformLocation("texOffY");
 	location_skyColour             = getUniformLocation("skyColour");

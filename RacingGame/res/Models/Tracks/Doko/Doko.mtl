@@ -1,0 +1,47 @@
+# Material Count: 5
+
+newmtl ami
+Ns 20
+Ni 0.02
+Tr 1
+map_d ami.png
+scrollX 0
+scrollY 0
+map_Kd ami.png
+
+newmtl road2
+Ns 20
+Ni 0.02
+Tr 1
+map_d road2.png
+scrollX 0
+scrollY 0
+map_Kd road2.png
+
+newmtl start
+Ns 20
+Ni 0.02
+Tr 1
+map_d start.png
+scrollX 0
+scrollY 0
+map_Kd start.png
+
+newmtl road1
+Ns 20
+Ni 0.02
+Tr 1
+map_d road1.png
+scrollX 0
+scrollY 0
+map_Kd road1.png
+
+newmtl road
+Ns 20
+Ni 0.02
+Tr 1
+map_d road.png
+scrollX 0
+scrollY 0
+map_Kd road.png
+

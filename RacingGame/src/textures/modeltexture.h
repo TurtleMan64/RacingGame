@@ -2,7 +2,7 @@
 #define MODELTEXTURES_H
 
 #include <glad/glad.h>
-
+#include "../toolbox/vector.h"
 
 class ModelTexture
 {
@@ -45,7 +45,6 @@ public:
 
 	float getScrollX();
 	float getScrollY();
-
 
 	void deleteMe();
 };

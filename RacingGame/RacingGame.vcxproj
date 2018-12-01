@@ -36,6 +36,7 @@
     <ClCompile Include="src\entities\Dummy.cpp" />
     <ClCompile Include="src\entities\Entity.cpp" />
     <ClCompile Include="src\entities\Car.cpp" />
+    <ClCompile Include="src\entities\JumpRamp.cpp" />
     <ClCompile Include="src\entities\Light.cpp" />
     <ClCompile Include="src\entities\RainbowRoad\RR_BackgroundStars.cpp" />
     <ClCompile Include="src\entities\SkySphere.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="src\entities\dummy.h" />
     <ClInclude Include="src\entities\entity.h" />
     <ClInclude Include="src\entities\car.h" />
+    <ClInclude Include="src\entities\jumpramp.h" />
     <ClInclude Include="src\entities\light.h" />
     <ClInclude Include="src\entities\RainbowRoad\RR_backgroundstars.h" />
     <ClInclude Include="src\entities\skysphere.h" />
@@ -247,8 +249,8 @@
     <LibraryPath>E:\CWorkspace\RacingGame\Libraries\Code;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>E:\CWorkspace\RacingGame\Libraries\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\CWorkspace\RacingGame\Libraries\Code64;$(LibraryPath)</LibraryPath>
+    <IncludePath>../Libraries/Include;$(IncludePath)</IncludePath>
+    <LibraryPath>../Libraries/Code64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -17,6 +17,7 @@ protected:
 	float rotX, rotY, rotZ, rotRoll;
 	float scale;
 	bool visible;
+	Vector3f baseColour;
 	Matrix4f transformationMatrix;
 
 	static void deleteModels(std::list<TexturedModel*>* modelsToDelete);
@@ -46,6 +47,9 @@ public:
 	Vector3f* getPosition();
 	void setPosition(Vector3f*);
 	void setPosition(float newX, float newY, float newZ);
+
+	Vector3f* getBaseColour();
+	void setBaseColour(float red, float green, float blue);
 
 	float getRotX();
 	void setRotX(float);
