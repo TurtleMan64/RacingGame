@@ -40,34 +40,17 @@ void Main_deleteAllTransparentEntites();
 #define STATE_TITLE 4
 #define STATE_DEBUG 5
 
-#define LVL_EMERALD_COAST  	    0
-#define LVL_DRY_LAGOON		    1
-#define LVL_SPEED_HIGHWAY	    2
-#define LVL_TWINKLE_PARK	    3
-#define LVL_WILD_CANYON		    4
-#define LVL_METAL_HARBOR	    5
-#define LVL_DELFINO_PLAZA	    6
-#define LVL_GREEN_HILL_ZONE	    7
-#define LVL_NOKI_BAY		    8
-#define LVL_WEAPONS_BED		    9
-#define LVL_OUTSET_ISLAND	   10
-#define LVL_WUHU_ISLAND		   11
-#define LVL_SNOWHEAD		   12
-#define LVL_SAND_HILL		   13
-#define LVL_RAINBOW_ROAD	   14
-#define LVL_PEACHS_CASTLE	   15
-#define LVL_KOOPA_BEACH		   16
-#define LVL_FIRE_FIELD		   17
-#define LVL_BOBOMB_BATTLEFIELD 18
-#define LVL_KINGDOM_VALLEY	   19
-#define LVL_PUMPKIN_HILL       20
-#define LVL_RADICAL_HIGHWAY    21
-#define LVL_BOSS               22
+#define LVL_DRAGON_ROAD      0
+#define LVL_THUNDER_ROAD     1
+#define LVL_BIG_BLUE         2
+#define LVL_WARIO_COLOSSEUM	 3
+#define LVL_CASINO_PALACE    4
+#define LVL_RAINBOW_ROAD     5
 
 #define ENTITY_RENDER_DIST 2000.0f
 #define ENTITY_RENDER_DIST_HIGH 5000.0f
 
-#define DEV_MODE
+//#define DEV_MODE
 
 #ifdef DEV_MODE
 	#include <thread>
@@ -102,7 +85,7 @@ public:
 	static int gameLives;
 	static int gameClock;
 	static int gameMainVehicleSpeed;
-	static int finishStageTimer;
+	static float finishStageTimer;
 	static Fbo* gameMultisampleFbo;
 	static Fbo* gameOutputFbo;
 	static Fbo* gameOutputFbo2;
@@ -115,8 +98,8 @@ public:
 	static std::string gameMissionDescription;
 	static int gameRingTarget; //How many rings you have to collect to finish the stage in Ring mode
 	static bool gameIsArcadeMode;
-	static int gameTotalPlaytime;
-	static int gameArcadePlaytime;
+	static float gameTotalPlaytime;
+	static float gameArcadePlaytime;
 	static bool stageUsesWater;
 
 	static bool  spawnAtCheckpoint;

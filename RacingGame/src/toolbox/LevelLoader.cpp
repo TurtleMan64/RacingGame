@@ -181,20 +181,7 @@ void LevelLoader::loadLevel(std::string levelFilename)
 		AudioPlayer::deleteBuffersBGM();
 	}
 
-	Global::stageUsesWater = true;
-	if (Global::levelID == LVL_RADICAL_HIGHWAY ||
-		Global::levelID == LVL_FIRE_FIELD ||
-		Global::levelID == LVL_BOBOMB_BATTLEFIELD ||
-		Global::levelID == LVL_PUMPKIN_HILL ||
-		Global::levelID == LVL_SAND_HILL ||
-		Global::levelID == LVL_SNOWHEAD ||
-		Global::levelID == LVL_SPEED_HIGHWAY ||
-		Global::levelID == LVL_WILD_CANYON ||
-		Global::levelID == LVL_TWINKLE_PARK ||
-		Global::levelID == LVL_BOSS)
-	{
-		Global::stageUsesWater = false;
-	}
+	Global::stageUsesWater = false;
 
 	//Run through the header content
 
@@ -593,7 +580,7 @@ void LevelLoader::processLine(char** dat, int /*datLength*/)
 
 		case 6: //Car
 		{
-			Car* car = new Car(0, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
+			Car* car = new Car(MainMenu::characterSelectIndex, toFloat(dat[1]), toFloat(dat[2]), toFloat(dat[3]), 0, 0, -1); INCR_NEW
 			Global::gameMainVehicle = car;
 			Main_addEntity(car);
 			return;

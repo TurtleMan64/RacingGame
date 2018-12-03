@@ -58,7 +58,7 @@ void PauseScreen::step()
 		}
 		else if (Global::gameState == STATE_RUNNING)
 		{
-			if (Global::finishStageTimer == -1)
+			if (Global::finishStageTimer < -0.5f)
 			{
 				pause();
 			}

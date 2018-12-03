@@ -210,6 +210,7 @@ private:
 public:
 	Car();
 	Car(int vehicleID, float x, float y, float z, float xDir, float yDir, float zDir);
+	~Car();
 
 	void step();
 

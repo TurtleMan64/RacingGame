@@ -31,7 +31,7 @@ res/Audio/BGM/casino_b_loop.ogg
 3 res/Models/Tracks/Casino/ Pass3
 
 # Transparent
-#4 res/Models/Tracks/Casino/ Transparent
+4 res/Models/Tracks/Casino/ Transparent
 
 10 0 0 0 -50 60 30 50 0
 10 0 3.377031 13.66355 -1184.71 650.125 156.25 1087.75 1

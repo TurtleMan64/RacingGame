@@ -19,6 +19,7 @@
 #include "../toolbox/split.h"
 #include "../audio/source.h"
 #include "checkpoint.h"
+#include "../guis/guimanager.h"
 
 #include <list>
 #include <iostream>
@@ -51,6 +52,15 @@ Car::Car(int vehicleID, float x, float y, float z, float xDir, float yDir, float
 
 	loadVehicleInfo();
 	canMoveTimer = 1.0f;
+}
+
+Car::~Car()
+{
+	if (sourceEngine       != nullptr) sourceEngine->stop();
+	if (sourceStrafe       != nullptr) sourceStrafe->stop();
+	if (sourceSlipSlowdown != nullptr) sourceSlipSlowdown->stop();
+	if (sourceDanger       != nullptr) sourceDanger->stop();
+	if (sourceHeal         != nullptr) sourceHeal->stop();
 }
 
 void Car::step()
@@ -1272,6 +1282,8 @@ void Car::checkpointTest()
 
 				case 3:
 					//AudioPlayer::playBGMWithIntro(2, 3);
+					GuiManager::stopTimer();
+					Global::finishStageTimer = 0;
 					break;
 
 				default: break;
@@ -1290,10 +1302,10 @@ void Car::checkpointTest()
 void Car::explode()
 {
 	if (sourceEngine       != nullptr) sourceEngine->stop();
-	if (sourceStrafe       != nullptr) sourceEngine->stop();
-	if (sourceSlipSlowdown != nullptr) sourceEngine->stop();
-	if (sourceDanger       != nullptr) sourceEngine->stop();
-	if (sourceHeal         != nullptr) sourceEngine->stop();
+	if (sourceStrafe       != nullptr) sourceStrafe->stop();
+	if (sourceSlipSlowdown != nullptr) sourceSlipSlowdown->stop();
+	if (sourceDanger       != nullptr) sourceDanger->stop();
+	if (sourceHeal         != nullptr) sourceHeal->stop();
 
 	vel.normalize();
 	vel.scale(VEL_SLOWEST);
@@ -1424,11 +1436,11 @@ void Car::loadVehicleInfo()
 		switch (vehicleID)
 		{
 			case 0: engineFilename = "res/Models/Machines/BlueFalcon/Engine.ini";   break;
-			case 1: engineFilename = "res/Models/Machines/Arwing/Engine.ini";       break;
-			case 2: engineFilename = "res/Models/Machines/RedGazelle/Engine.ini";   break;
-			case 3: engineFilename = "res/Models/Machines/TwinNorita/Engine.ini";   break;
-			case 4: engineFilename = "res/Models/Machines/BlackBull/Engine.ini";    break;
-			case 5: engineFilename = "res/Models/Machines/SonicPhantom/Engine.ini"; break;
+			case 4: engineFilename = "res/Models/Machines/Arwing/Engine.ini";       break;
+			case 5: engineFilename = "res/Models/Machines/RedGazelle/Engine.ini";   break;
+			case 1: engineFilename = "res/Models/Machines/TwinNorita/Engine.ini";   break;
+			case 3: engineFilename = "res/Models/Machines/BlackBull/Engine.ini";    break;
+			case 2: engineFilename = "res/Models/Machines/SonicPhantom/Engine.ini"; break;
 			default: break;
 		}
 
@@ -1475,11 +1487,11 @@ void Car::loadVehicleInfo()
 		switch (vehicleID)
 		{
 			case 0: statsFilename = "res/Models/Machines/BlueFalcon/Machine.ini";   break;
-			case 1: statsFilename = "res/Models/Machines/Arwing/Machine.ini";       break;
-			case 2: statsFilename = "res/Models/Machines/RedGazelle/Machine.ini";   break;
-			case 3: statsFilename = "res/Models/Machines/TwinNorita/Machine.ini";   break;
-			case 4: statsFilename = "res/Models/Machines/BlackBull/Machine.ini";    break;
-			case 5: statsFilename = "res/Models/Machines/SonicPhantom/Machine.ini"; break;
+			case 4: statsFilename = "res/Models/Machines/Arwing/Machine.ini";       break;
+			case 5: statsFilename = "res/Models/Machines/RedGazelle/Machine.ini";   break;
+			case 1: statsFilename = "res/Models/Machines/TwinNorita/Machine.ini";   break;
+			case 3: statsFilename = "res/Models/Machines/BlackBull/Machine.ini";    break;
+			case 2: statsFilename = "res/Models/Machines/SonicPhantom/Machine.ini"; break;
 			default: break;
 		}
 
@@ -1552,11 +1564,11 @@ void Car::loadVehicleInfo()
 	switch (vehicleID)
 	{
 		case 0: modelFolder = "res/Models/Machines/BlueFalcon/";   modelName = "GX";           break;
-		case 1: modelFolder = "res/Models/Machines/Arwing/";       modelName = "Arwing";       break;
-		case 2: modelFolder = "res/Models/Machines/RedGazelle/";   modelName = "RedGazelle";   break;
-		case 3: modelFolder = "res/Models/Machines/TwinNorita/";   modelName = "TwinNorita";   break;
-		case 4: modelFolder = "res/Models/Machines/BlackBull/";    modelName = "BlackBull";    break;
-		case 5: modelFolder = "res/Models/Machines/SonicPhantom/"; modelName = "SonicPhantom"; break;
+		case 4: modelFolder = "res/Models/Machines/Arwing/";       modelName = "Arwing";       break;
+		case 5: modelFolder = "res/Models/Machines/RedGazelle/";   modelName = "RedGazelle";   break;
+		case 1: modelFolder = "res/Models/Machines/TwinNorita/";   modelName = "TwinNorita";   break;
+		case 3: modelFolder = "res/Models/Machines/BlackBull/";    modelName = "BlackBull";    break;
+		case 2: modelFolder = "res/Models/Machines/SonicPhantom/"; modelName = "SonicPhantom"; break;
 		default: break;
 	}
 	loadModel(&Car::models[vehicleID], modelFolder, modelName);

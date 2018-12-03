@@ -98,7 +98,7 @@ SkySphere* Global::gameSkySphere   = nullptr;
 Light*     Global::gameLightSun    = nullptr;
 Light*     Global::gameLightMoon   = nullptr;
 
-int Global::finishStageTimer = -1;
+float Global::finishStageTimer = -1;
 
 Fbo* Global::gameMultisampleFbo = nullptr;
 Fbo* Global::gameOutputFbo = nullptr;
@@ -148,8 +148,8 @@ int Global::gameRingCount = 0;
 int Global::gameScore = 0;
 int Global::gameLives = 4;
 int Global::gameClock = 0;
-int Global::gameTotalPlaytime = 0;
-int Global::gameArcadePlaytime = 0;
+float Global::gameTotalPlaytime = 0;
+float Global::gameArcadePlaytime = 0;
 float Global::deathHeight = -100.0f;
 int Global::gameMainVehicleSpeed = 0;
 
@@ -290,18 +290,18 @@ int main()
 
 	while (Global::gameState != STATE_EXITING && displayWantsToClose() == 0)
 	{
-		Global::gameTotalPlaytime++;
-
-		if (Global::gameIsArcadeMode)
-		{
-			Global::gameArcadePlaytime++;
-		}
-
 		frameCount++;
 		timeNew = glfwGetTime();
 		dt = (float)(timeNew - timeOld);
 		dt = std::fminf(dt, 0.1f); //Anything lower than 10fps will slow the gameplay down
 		timeOld = timeNew;
+
+		Global::gameTotalPlaytime+=dt;
+
+		if (Global::gameIsArcadeMode)
+		{
+			Global::gameArcadePlaytime+=dt;
+		}
 
 		Input::pollInputs();
 
@@ -450,7 +450,7 @@ int main()
 
 				if (Global::gameIsRingMode)
 				{
-					if (Global::gameRingCount >= Global::gameRingTarget && Global::finishStageTimer == -1)
+					if (Global::gameRingCount >= Global::gameRingTarget && Global::finishStageTimer < -0.5f)
 					{
 						Global::finishStageTimer = 0;
 						GuiManager::stopTimer();
@@ -583,24 +583,21 @@ int main()
 
 		if (Global::finishStageTimer >= 0)
 		{
-			if (Global::finishStageTimer == 0)
-			{
-				//Add score based on timer
-				//Global::gameScore += std::max(0, 11200 - 20*(GuiManager::getMinutes()*60 + GuiManager::getSeconds()));
-			}
+			float finishTimerBefore = Global::finishStageTimer;
+			Global::finishStageTimer += dt;
 
 			//Stage finished stuff
-			if (Global::finishStageTimer == 1)
+			if (finishTimerBefore < 0.0166f && Global::finishStageTimer >= 0.0166f)
 			{
 				Vector3f partVel(0, 0, 0);
 				new Particle(ParticleResources::textureWhiteFadeOutAndIn, Global::gameCamera->getFadePosition1(), &partVel, 0, 2.0f, 0, 900, 0, true, false);
 			}
-			else if (Global::finishStageTimer == 60)
+			else if (finishTimerBefore < 1.0f && Global::finishStageTimer >= 1.0f)
 			{
 				AudioPlayer::stopBGM();
 				//AudioPlayer::play(24, Global::gamePlayer->getPosition());
 			}
-			else if (Global::finishStageTimer == 490)
+			else if (finishTimerBefore < 8.166f && Global::finishStageTimer >= 8.166f)
 			{
 				Vector3f partVel(0, 0, 0);
 				new Particle(ParticleResources::textureBlackFadeOutAndIn, Global::gameCamera->getFadePosition1(), &partVel, 0, 2.0f, 0, 900, 0, true, false);
@@ -608,21 +605,19 @@ int main()
 				//AudioPlayer::play(25, Global::gamePlayer->getPosition());
 			}
 
-			if (Global::finishStageTimer >= 1 &&
-				Global::finishStageTimer < 60)
+			if (Global::finishStageTimer >= 0 &&
+				Global::finishStageTimer < 1)
 			{
-				AudioPlayer::setBGMVolume((60-Global::finishStageTimer)/60.0f);
+				AudioPlayer::setBGMVolume(1-Global::finishStageTimer);
 			}
 
-			Global::finishStageTimer++;
-
-			if (Global::finishStageTimer == 550)
+			if (finishTimerBefore < 9.166f && Global::finishStageTimer >= 9.166f)
 			{
 				if (Global::gameIsArcadeMode)
 				{
 					Global::levelID+=1;
 
-					if (Global::levelID <= LVL_BOSS)
+					if (Global::levelID <= LVL_RAINBOW_ROAD)
 					{
 						Level* nextLevel = &Global::gameLevelData[Global::levelID];
 						Global::shouldLoadLevel = true;
@@ -642,7 +637,7 @@ int main()
 						}
 						else
 						{
-							int currentPB = std::stoi(Global::gameSaveData["BestArcadeClearTime"]);
+							float currentPB = std::stof(Global::gameSaveData["BestArcadeClearTime"]);
 							if (Global::gameArcadePlaytime < currentPB)
 							{
 								Global::gameSaveData["BestArcadeClearTime"] = std::to_string(Global::gameArcadePlaytime);
@@ -663,7 +658,7 @@ int main()
 				}
 			}
 
-			if (Global::finishStageTimer == 548)
+			if (finishTimerBefore < 9.133f && Global::finishStageTimer >= 9.133f)
 			{
 				GuiManager::clearGuisToRender();
 				Global::gameScore = 0;
@@ -671,7 +666,7 @@ int main()
 				GuiManager::setTimer(0);
 			}
 
-			if (Global::finishStageTimer == 370)
+			if (finishTimerBefore < 6.166f && Global::finishStageTimer >= 6.166f)
 			{
 				int rank = Global::calculateRankAndUpdate();
 				switch (rank)
@@ -934,7 +929,7 @@ void Global::loadSaveData()
 
 	if (Global::gameSaveData.find("PLAYTIME") != Global::gameSaveData.end())
 	{
-		Global::gameTotalPlaytime = std::stoi(Global::gameSaveData["PLAYTIME"]);
+		Global::gameTotalPlaytime = std::stof(Global::gameSaveData["PLAYTIME"]);
 	}
 
 	if (Global::gameSaveData.find("CAMERA") != Global::gameSaveData.end())
@@ -963,7 +958,7 @@ void Global::saveSaveData()
 
 	if (!file.is_open())
 	{
-		std::fprintf(stdout, "Error: Failed to create/access 'res/SaveData/SaveData.sav'\n");
+		std::fprintf(stderr, "Error: Failed to create/access 'res/SaveData/SaveData.sav'\n");
 		file.close();
 	}
 	else
@@ -1061,13 +1056,13 @@ int Global::calculateRankAndUpdate()
 			Global::saveSaveData();
 		}
 
-		int newTime   = 360001;//GuiManager::getTotalTimerInFrames();
-		int savedTime = 360000;
+		float newTime   = GuiManager::getTotalTimerInSeconds();
+		float savedTime = 6000.0f;
 
 		if (Global::gameSaveData.find(currentLevel->displayName+missionTimeString) != Global::gameSaveData.end())
 		{
 			std::string savedTimeString = Global::gameSaveData[currentLevel->displayName+missionTimeString];
-			savedTime = std::stoi(savedTimeString);
+			savedTime = std::stof(savedTimeString);
 		}
 
 		if (newTime < savedTime)

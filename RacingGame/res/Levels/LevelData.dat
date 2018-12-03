@@ -3,40 +3,47 @@
 DragonRoad.lvl
 Dragon Road
 4
-Normal;13000;Find the pieces of the Master Emerald!
-Ring;3600;100;Collect 100 Rings!
-Chao;3600;Find the lost chao!
-Hard;1600;Clear hard mode!
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow
 
 ThunderRoad.lvl
 Thunder Road
-3
-Normal;14000;Escape from the military base!
-Ring;4800;150;Collect 150 Rings!
-Chao;2700;Find the lost chao!
+4
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow
 
 Ordeal.lvl
 Big Blue
-3
-Normal;13000;Find the pieces of the Master Emerald!
-Chao;1800;Find the lost chao!
-Hard;14000;Clear hard mode!
+4
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow
 
 WarioColosseum.lvl
 Wario Colosseum
-3
-Normal;13000;Find the pieces of the Master Emerald!
-Chao;9600;Find the lost chao!
-Hard;13000;Clear hard mode!
+4
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow
 
 Casino.lvl
 Casino Palace
-2
-Normal;10000;Do a lap around the island
-Chao;1800;Find the lost chao!
+4
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow
 
 RainbowRoadDS.lvl
 Rainbow Road
-2
-Normal;10000;Go fast
-Chao;900;Find the lost chao!
+4
+Normal;100;Complete as Blue Falcon
+Ring;100;100;Complete as Twin Norita
+Chao;100;Complete as Soic Phantom
+Hard;100;Complete as Black Shadow

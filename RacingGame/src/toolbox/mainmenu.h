@@ -44,15 +44,15 @@ private:
 	static GUIText* textTitleCardMission;
 	static GUIText* textTitleCardMissionDescription;
 
-	static GUIText* textItem1; //ARCADE
+	static GUIText* textItem1; //GRAND PRIX
 	static GUIText* textItem2; //MISSIONS
 	static GUIText* textItem3; //EXTRAS
 	static GUIText* textItem4; //QUIT
 
-	static GUIText* textExtra1Title; //Number of A ranks
-	static GUIText* textExtra1Data;
-	static GUIText* textExtra2Title; //Number of NPC found
-	static GUIText* textExtra2Data;
+	//static GUIText* textExtra1Title; //Number of A ranks
+	//static GUIText* textExtra1Data;
+	//static GUIText* textExtra2Title; //Number of NPC found
+	//static GUIText* textExtra2Data;
 	static GUIText* textExtra3Title; //Total playtime
 	static GUIText* textExtra3Data;
 	static GUIText* textExtra4Title; //Best Arcade clear time
@@ -149,7 +149,7 @@ private:
 
 	static void unloadResources();
 
-	static std::string convertFramesToTime(int frames);
+	static std::string convertSecondsToTimeString(float timerSeconds);
 
 	static void updateBestDisplay(int levelID);
 
